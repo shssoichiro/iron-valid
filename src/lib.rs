@@ -25,16 +25,16 @@ pub enum Rule {
     ActiveUrl,
     /// The field under validation must be entirely alphabetic characters.
     ///
-    /// This validator only accepts Latin characters, and will reject Unicode characters.
+    /// This validator accepts Latin and international (Unicode) input.
     Alpha,
     /// The field under validation may have alpha-numeric characters,
     /// as well as dashes and underscores.
     ///
-    /// This validator only accepts Latin characters, and will reject Unicode characters.
+    /// This validator accepts Latin and international (Unicode) input.
     AlphaDash,
     /// The field under validation must be entirely alpha-numeric characters.
     ///
-    /// This validator only accepts Latin characters, and will reject Unicode characters.
+    /// This validator accepts Latin and international (Unicode) input.
     AlphaNumeric,
     /// The field under validation, if present, must be an array.
     Array,
