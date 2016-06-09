@@ -7,12 +7,12 @@ pub fn validate_email(values: &Map, field: &str) -> Result<Option<Value>, String
     }
 
     match values.find(&[field]) {
-        Some(&Value::String(ref email)) => {
-            if email.is_empty() {
+        Some(&Value::String(ref value)) => {
+            if value.is_empty() {
                 // Allow empty values
                 return Ok(None);
             }
-            if EMAIL_REGEX.is_match(email) {
+            if EMAIL_REGEX.is_match(value) {
                 // Allow valid emails
                 return Ok(None);
             }

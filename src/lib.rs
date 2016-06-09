@@ -7,6 +7,7 @@ use params::{Map, Value};
 use std::collections::BTreeMap;
 
 mod validators {
+    pub mod accepted;
     pub mod email;
 }
 
@@ -14,6 +15,8 @@ mod validators {
 pub enum Rule {
     /// The field under validation must be `yes`, `on`, `1`, or `true`.
     /// This is useful for validating "Terms of Service" acceptance.
+    ///
+    /// On success, will transform the input to a boolean `true`.
     Accepted,
     /// The field under validation must be a valid URL with an active DNS entry.
     ActiveUrl,
@@ -27,7 +30,7 @@ pub enum Rule {
     /// The field under validation must be an array.
     Array,
     /// The field under validation must have a size between the given min and max.
-    /// Strings and numerics are evaluated in the same fashion as the `Size` rule.
+    /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Between(isize, isize),
     /// The field under validation must be able to be cast as a boolean.
     /// Accepted input are `true`, `false`, `1`, `0`, `"1"`, and `"0"`.
@@ -59,10 +62,10 @@ pub enum Rule {
     /// The field under validation must be a valid JSON string.
     Json,
     /// The field under validation must be less than or equal to a maximum value.
-    /// Strings and numerics are evaluated in the same fashion as the `Size` rule.
+    /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Max(isize),
     /// The field under validation must have a minimum value.
-    /// Strings and numerics are evaluated in the same fashion as the `Size` rule.
+    /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Min(isize),
     /// The field under validation must not be included in the given list of values.
     NotIn(Vec<Value>),
@@ -108,6 +111,8 @@ pub enum Rule {
     /// For string data, value corresponds to the number of characters.
     ///
     /// For numeric data, value corresponds to a given integer value.
+    ///
+    /// For files, size corresponds to the file size in kilobytes.
     Size(isize),
     /// The field under validation must be a string.
     String,
@@ -126,6 +131,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
         let mut current_errors = Vec::new();
         for rule in ruleset {
             let result = match *rule {
+                Rule::Accepted => validators::accepted::validate_accepted(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
