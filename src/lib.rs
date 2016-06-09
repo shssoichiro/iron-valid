@@ -10,6 +10,7 @@ use std::collections::BTreeMap;
 mod validators {
     pub mod accepted;
     pub mod active_url;
+    pub mod alpha;
     pub mod email;
 }
 
@@ -23,12 +24,28 @@ pub enum Rule {
     /// The field under validation, if present, must be an active domain name.
     ActiveUrl,
     /// The field under validation must be entirely alphabetic characters.
+    ///
+    /// This validator only accepts Latin characters, and will reject Unicode characters.
     Alpha,
     /// The field under validation may have alpha-numeric characters,
     /// as well as dashes and underscores.
+    ///
+    /// This validator only accepts Latin characters, and will reject Unicode characters.
     AlphaDash,
     /// The field under validation must be entirely alpha-numeric characters.
+    ///
+    /// This validator only accepts Latin characters, and will reject Unicode characters.
     AlphaNumeric,
+    /// The field under validation must be entirely alphabetic characters.
+    ///
+    /// This validator accepts Unicode characters, and will accept Latin and international
+    /// alphabetic characters.
+    AlphaUnicode,
+    /// The field under validation must be entirely alpha-numeric characters.
+    ///
+    /// This validator accepts Unicode characters, and will accept Latin and international
+    /// alphanumeric characters.
+    AlphaNumericUnicode,
     /// The field under validation, if present, must be an array.
     Array,
     /// The field under validation, if present, must have a size between the given min and max.
@@ -137,6 +154,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
             let result = match *rule {
                 Rule::Accepted => validators::accepted::validate_accepted(&new_values, field),
                 Rule::ActiveUrl => validators::active_url::validate_active_url(&new_values, field),
+                Rule::Alpha => validators::alpha::validate_alpha(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
