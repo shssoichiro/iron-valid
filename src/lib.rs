@@ -36,16 +36,6 @@ pub enum Rule {
     ///
     /// This validator only accepts Latin characters, and will reject Unicode characters.
     AlphaNumeric,
-    /// The field under validation must be entirely alphabetic characters.
-    ///
-    /// This validator accepts Unicode characters, and will accept Latin and international
-    /// alphabetic characters.
-    AlphaUnicode,
-    /// The field under validation must be entirely alpha-numeric characters.
-    ///
-    /// This validator accepts Unicode characters, and will accept Latin and international
-    /// alphanumeric characters.
-    AlphaNumericUnicode,
     /// The field under validation, if present, must be an array.
     Array,
     /// The field under validation, if present, must have a size between the given min and max.
