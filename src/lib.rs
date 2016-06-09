@@ -1,3 +1,4 @@
+extern crate dns_lookup;
 #[macro_use]
 extern crate lazy_static;
 extern crate params;
@@ -8,6 +9,7 @@ use std::collections::BTreeMap;
 
 mod validators {
     pub mod accepted;
+    pub mod active_url;
     pub mod email;
 }
 
@@ -18,7 +20,7 @@ pub enum Rule {
     ///
     /// On success, will transform the input to a boolean `true`.
     Accepted,
-    /// The field under validation must be a valid URL with an active DNS entry.
+    /// The field under validation, if present, must be an active domain name.
     ActiveUrl,
     /// The field under validation must be entirely alphabetic characters.
     Alpha,
@@ -27,12 +29,12 @@ pub enum Rule {
     AlphaDash,
     /// The field under validation must be entirely alpha-numeric characters.
     AlphaNumeric,
-    /// The field under validation must be an array.
+    /// The field under validation, if present, must be an array.
     Array,
-    /// The field under validation must have a size between the given min and max.
+    /// The field under validation, if present, must have a size between the given min and max.
     /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Between(isize, isize),
-    /// The field under validation must be able to be cast as a boolean.
+    /// The field under validation, if present, must be able to be cast as a boolean.
     /// Accepted input are `true`, `false`, `1`, `0`, `"1"`, and `"0"`.
     Boolean,
     /// The field under validation must have a matching field of `foo_confirmation`.
@@ -41,41 +43,43 @@ pub enum Rule {
     Confirmed,
     /// The field under validation must have a different value than `field`.
     Different(String),
-    /// The field under validation must be numeric and must have an exact length of value.
+    /// The field under validation, if present,
+    /// must be numeric and must have an exact length of value.
     Digits(usize),
-    /// The field under validation must have a length between the given min and max.
+    /// The field under validation, if present, must have a length between the given min and max.
     DigitsBetween(usize, usize),
-    /// When working with arrays, the field under validation must not have any duplicate values.
+    /// When working with arrays, the field under validation must not have any duplicate values
+    /// if it is present.
     Distinct,
-    /// The field under validation must be formatted as an e-mail address.
+    /// The field under validation, if present, must be formatted as an e-mail address.
     Email,
     /// The field under validation must not be empty when it is present.
     Filled,
-    /// The field under validation must be included in the given list of values.
+    /// The field under validation, if present, must be included in the given list of values.
     In(Vec<Value>),
-    /// The field under validation must exist in `anotherfield`'s values.
+    /// The field under validation, if present, must exist in `anotherfield`'s values.
     InArray(String),
-    /// The field under validation must be an integer.
+    /// The field under validation, if present, must be an integer.
     Integer,
-    /// The field under validation must be an IP address.
+    /// The field under validation, if present, must be an IP address.
     IpAddress,
-    /// The field under validation must be a valid JSON string.
+    /// The field under validation, if present, must be a valid JSON string.
     Json,
-    /// The field under validation must be less than or equal to a maximum value.
+    /// The field under validation, if present, must be less than or equal to a maximum value.
     /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Max(isize),
-    /// The field under validation must have a minimum value.
+    /// The field under validation, if present, must have a minimum value.
     /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Min(isize),
     /// The field under validation must not be included in the given list of values.
     NotIn(Vec<Value>),
     /// The field under validation must not exist in `anotherfield`'s values.
     NotInArray(String),
-    /// The field under validation must be numeric.
+    /// The field under validation, if present, must be numeric.
     Numeric,
     /// The field under validation must be present in the input data but can be empty.
     Present,
-    /// The field under validation must match the given regular expression.
+    /// The field under validation, if present, must match the given regular expression.
     Regex(String),
     /// The field under validation must be present in the input data and not empty.
     /// A field is considered "empty" if one of the following conditions are true:
@@ -114,9 +118,9 @@ pub enum Rule {
     ///
     /// For files, size corresponds to the file size in kilobytes.
     Size(isize),
-    /// The field under validation must be a string.
+    /// The field under validation, if present, must be a string.
     String,
-    /// The field under validation must be formatted as a valid URL,
+    /// The field under validation, if present, must be formatted as a valid URL,
     /// but does not need to resolve to a real website.
     Url,
 }
@@ -132,6 +136,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
         for rule in ruleset {
             let result = match *rule {
                 Rule::Accepted => validators::accepted::validate_accepted(&new_values, field),
+                Rule::ActiveUrl => validators::active_url::validate_active_url(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
