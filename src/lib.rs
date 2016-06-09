@@ -1,8 +1,14 @@
+#[macro_use]
+extern crate lazy_static;
 extern crate params;
 extern crate regex;
 
-use params::{Params, Value};
+use params::{Map, Value};
 use std::collections::BTreeMap;
+
+mod validators {
+    pub mod email;
+}
 
 #[derive(Debug,Clone)]
 pub enum Rule {
@@ -110,8 +116,41 @@ pub enum Rule {
     Url,
 }
 
-pub fn validate(rules: BTreeMap<Rule, Vec<String>>,
-                values: Params)
-                -> Result<Params, BTreeMap<String, Vec<String>>> {
-    unimplemented!()
+pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
+                values: Map)
+                -> Result<Map, BTreeMap<&str, Vec<String>>> {
+    let mut new_values = values;
+    let mut errors = BTreeMap::new();
+
+    for (field, ruleset) in &rules {
+        let mut current_errors = Vec::new();
+        for rule in ruleset {
+            let result = match *rule {
+                Rule::Email => validators::email::validate_email(&new_values, field),
+                _ => {
+                    panic!(format!("Unrecognized validation rule {:?} for field {:?}",
+                                   rule,
+                                   field));
+                }
+            };
+            match result {
+                Ok(Some(res)) => {
+                    new_values.assign(field, res).ok();
+                }
+                Ok(None) => (),
+                Err(err) => {
+                    current_errors.push(err);
+                }
+            };
+        }
+        if !current_errors.is_empty() {
+            errors.insert(*field, current_errors);
+        }
+    }
+
+    if errors.is_empty() {
+        Ok(new_values)
+    } else {
+        Err(errors)
+    }
 }

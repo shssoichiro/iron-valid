@@ -1,8 +1,9 @@
 [package]
 authors = ["Joshua Holmer <jholmer.in@gmail.com>"]
-name = "iron-valid"
+name = "iron_valid"
 version = "0.1.0"
 
 [dependencies]
+lazy_static = "^0.2.1"
 params = "^0.2.2"
 regex = "^0.1.71"
