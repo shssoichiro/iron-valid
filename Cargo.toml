@@ -1,0 +1,8 @@
+[package]
+authors = ["Joshua Holmer <jholmer.in@gmail.com>"]
+name = "iron-valid"
+version = "0.1.0"
+
+[dependencies]
+params = "^0.2.2"
+regex = "^0.1.71"
