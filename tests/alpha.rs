@@ -63,7 +63,7 @@ fn test_alpha_invalid_numeric_string() {
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("alpha").unwrap(),
-               vec!["The alpha field must contain only alphabetic characters.".to_owned()]);
+               vec!["The alpha field may only contain alphabetic characters.".to_owned()]);
 }
 
 #[test]
@@ -78,7 +78,37 @@ fn test_alpha_invalid_whitespace() {
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("alpha").unwrap(),
-               vec!["The alpha field must contain only alphabetic characters.".to_owned()]);
+               vec!["The alpha field may only contain alphabetic characters.".to_owned()]);
+}
+
+#[test]
+fn test_alpha_invalid_underscore() {
+    let mut params = Map::new();
+    params.assign("alpha", Value::String("foo_bar_baz".to_owned())).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("alpha", vec![Rule::Alpha]);
+
+    let result = validate(rules, params);
+
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("alpha").unwrap(),
+               vec!["The alpha field may only contain alphabetic characters.".to_owned()]);
+}
+
+#[test]
+fn test_alpha_invalid_dash() {
+    let mut params = Map::new();
+    params.assign("alpha", Value::String("foo-bar-baz".to_owned())).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("alpha", vec![Rule::Alpha]);
+
+    let result = validate(rules, params);
+
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("alpha").unwrap(),
+               vec!["The alpha field may only contain alphabetic characters.".to_owned()]);
 }
 
 #[test]
@@ -93,7 +123,7 @@ fn test_alpha_invalid_numeric() {
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("alpha").unwrap(),
-               vec!["The alpha field must contain only alphabetic characters.".to_owned()]);
+               vec!["The alpha field may only contain alphabetic characters.".to_owned()]);
 }
 
 #[test]
