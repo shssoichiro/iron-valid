@@ -15,6 +15,7 @@ mod validators {
     pub mod alpha_numeric;
     pub mod array;
     pub mod between;
+    pub mod boolean;
     pub mod email;
 }
 
@@ -47,6 +48,8 @@ pub enum Rule {
     Between(isize, isize),
     /// The field under validation, if present, must be able to be cast as a boolean.
     /// Accepted input are `true`, `false`, `1`, `0`, `"1"`, and `"0"`.
+    ///
+    /// On success, will transform the input to a boolean `true` or `false`.
     Boolean,
     /// The field under validation must have a matching field of `foo_confirmation`.
     /// For example, if the field under validation is `password`,
@@ -157,6 +160,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Between(min, max) => {
                     validators::between::validate_between(&new_values, field, min, max)
                 }
+                Rule::Boolean => validators::boolean::validate_boolean(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
