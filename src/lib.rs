@@ -14,6 +14,7 @@ mod validators {
     pub mod alpha_dash;
     pub mod alpha_numeric;
     pub mod array;
+    pub mod between;
     pub mod email;
 }
 
@@ -153,6 +154,9 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                     validators::alpha_numeric::validate_alpha_numeric(&new_values, field)
                 }
                 Rule::Array => validators::array::validate_array(&new_values, field),
+                Rule::Between(min, max) => {
+                    validators::between::validate_between(&new_values, field, min, max)
+                }
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
