@@ -130,6 +130,22 @@ fn test_alpha_numeric_valid_numeric() {
 }
 
 #[test]
+fn test_alpha_numeric_invalid_negative() {
+    let mut params = Map::new();
+    params.assign("alpha_numeric", Value::I64(-42)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("alpha_numeric", vec![Rule::AlphaNumeric]);
+
+    let result = validate(rules, params);
+
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("alpha_numeric").unwrap(),
+               vec!["The alpha numeric field may only contain alphanumeric characters."
+                        .to_owned()]);
+}
+
+#[test]
 fn test_alpha_numeric_invalid_float() {
     let mut params = Map::new();
     params.assign("alpha_numeric", Value::F64(42.1)).ok();
