@@ -13,6 +13,7 @@ mod validators {
     pub mod alpha;
     pub mod alpha_dash;
     pub mod alpha_numeric;
+    pub mod array;
     pub mod email;
 }
 
@@ -151,6 +152,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::AlphaNumeric => {
                     validators::alpha_numeric::validate_alpha_numeric(&new_values, field)
                 }
+                Rule::Array => validators::array::validate_array(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",

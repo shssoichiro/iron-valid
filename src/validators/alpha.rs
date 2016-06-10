@@ -13,7 +13,6 @@ pub fn validate_alpha(values: &Map, field: &str) -> Result<Option<Value>, String
             Err(format!("The {} field may only contain alphabetic characters.",
                         field.to_lowercase().replace("_", " ")))
         }
-        Some(&Value::Null) |
         None => {
             // Allow empty values
             Ok(None)

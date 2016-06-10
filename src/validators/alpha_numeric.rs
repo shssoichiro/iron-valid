@@ -17,7 +17,6 @@ pub fn validate_alpha_numeric(values: &Map, field: &str) -> Result<Option<Value>
         Some(&Value::I64(ref value)) if *value >= 0 => {
             Ok(Some(Value::String(format!("{}", value))))
         }
-        Some(&Value::Null) |
         None => {
             // Allow empty values
             Ok(None)

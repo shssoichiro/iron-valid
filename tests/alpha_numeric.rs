@@ -190,7 +190,7 @@ fn test_alpha_numeric_valid_blank() {
 }
 
 #[test]
-fn test_alpha_numeric_valid_null() {
+fn test_alpha_numeric_invalid_null() {
     let mut params = Map::new();
     params.assign("alpha_numeric", Value::Null).ok();
 
@@ -199,7 +199,8 @@ fn test_alpha_numeric_valid_null() {
 
     let result = validate(rules, params);
 
-    assert!(result.is_ok());
-    assert_eq!(result.unwrap().find(&["alpha_numeric"]).unwrap(),
-               &Value::Null);
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("alpha_numeric").unwrap(),
+               vec!["The alpha numeric field may only contain alphanumeric characters."
+                        .to_owned()]);
 }

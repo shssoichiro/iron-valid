@@ -155,7 +155,7 @@ fn test_alpha_valid_blank() {
 }
 
 #[test]
-fn test_alpha_valid_null() {
+fn test_alpha_invalid_null() {
     let mut params = Map::new();
     params.assign("alpha", Value::Null).ok();
 
@@ -164,6 +164,7 @@ fn test_alpha_valid_null() {
 
     let result = validate(rules, params);
 
-    assert!(result.is_ok());
-    assert_eq!(result.unwrap().find(&["alpha"]).unwrap(), &Value::Null);
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("alpha").unwrap(),
+               vec!["The alpha field may only contain alphabetic characters.".to_owned()]);
 }

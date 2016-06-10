@@ -187,7 +187,7 @@ fn test_alpha_dash_valid_blank() {
 }
 
 #[test]
-fn test_alpha_dash_valid_null() {
+fn test_alpha_dash_invalid_null() {
     let mut params = Map::new();
     params.assign("alpha_dash", Value::Null).ok();
 
@@ -196,6 +196,8 @@ fn test_alpha_dash_valid_null() {
 
     let result = validate(rules, params);
 
-    assert!(result.is_ok());
-    assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(), &Value::Null);
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("alpha_dash").unwrap(),
+               vec!["The alpha dash field may only contain alphanumeric characters, dashes, and underscores."
+                        .to_owned()]);
 }

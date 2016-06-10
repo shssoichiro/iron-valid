@@ -17,7 +17,6 @@ pub fn validate_alpha_dash(values: &Map, field: &str) -> Result<Option<Value>, S
         }
         Some(&Value::U64(ref value)) => Ok(Some(Value::String(format!("{}", value)))),
         Some(&Value::I64(ref value)) => Ok(Some(Value::String(format!("{}", value)))),
-        Some(&Value::Null) |
         None => {
             // Allow empty values
             Ok(None)

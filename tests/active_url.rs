@@ -111,7 +111,7 @@ fn test_active_url_valid_blank() {
 }
 
 #[test]
-fn test_active_url_valid_null() {
+fn test_active_url_invalid_null() {
     let mut params = Map::new();
     params.assign("active_url", Value::Null).ok();
 
@@ -120,6 +120,7 @@ fn test_active_url_valid_null() {
 
     let result = validate(rules, params);
 
-    assert!(result.is_ok());
-    assert_eq!(result.unwrap().find(&["active_url"]).unwrap(), &Value::Null);
+    assert!(result.is_err());
+    assert_eq!(*result.unwrap_err().get("active_url").unwrap(),
+               vec!["The active url field must contain a valid, active domain name.".to_owned()]);
 }

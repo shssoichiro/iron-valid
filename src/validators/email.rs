@@ -19,7 +19,6 @@ pub fn validate_email(values: &Map, field: &str) -> Result<Option<Value>, String
             Err(format!("The {} field must contain a valid email address.",
                         field.to_lowercase().replace("_", " ")))
         }
-        Some(&Value::Null) |
         None => {
             // Allow empty values
             Ok(None)

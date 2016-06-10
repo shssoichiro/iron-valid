@@ -15,7 +15,6 @@ pub fn validate_active_url(values: &Map, field: &str) -> Result<Option<Value>, S
                             field.to_lowercase().replace("_", " ")))
             }
         }
-        Some(&Value::Null) |
         None => {
             // Allow empty values
             Ok(None)
