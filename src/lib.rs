@@ -17,7 +17,9 @@ mod validators {
     pub mod between;
     pub mod boolean;
     pub mod confirmed;
+    pub mod different;
     pub mod email;
+    pub mod same;
 }
 
 #[derive(Debug,Clone)]
@@ -163,7 +165,11 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 }
                 Rule::Boolean => validators::boolean::validate_boolean(&new_values, field),
                 Rule::Confirmed => validators::confirmed::validate_confirmed(&new_values, field),
+                Rule::Different(ref other) => {
+                    validators::different::validate_different(&new_values, field, other)
+                }
                 Rule::Email => validators::email::validate_email(&new_values, field),
+                Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
                                    rule,
