@@ -62,8 +62,14 @@ pub enum Rule {
     Different(String),
     /// The field under validation, if present,
     /// must be numeric and must have an exact length of value.
+    ///
+    /// On success, will transform positive string input to U64 and
+    /// negative string input to I64.
     Digits(usize),
     /// The field under validation, if present, must have a length between the given min and max.
+    ///
+    /// On success, will transform positive string input to U64 and
+    /// negative string input to I64.
     DigitsBetween(usize, usize),
     /// When working with arrays, the field under validation must not have any duplicate values
     /// if it is present.
@@ -77,6 +83,9 @@ pub enum Rule {
     /// The field under validation, if present, must exist in `anotherfield`'s values.
     InArray(String),
     /// The field under validation, if present, must be an integer.
+    ///
+    /// On success, will transform positive string input to U64 and
+    /// negative string input to I64.
     Integer,
     /// The field under validation, if present, must be an IP address.
     IpAddress,
@@ -93,6 +102,9 @@ pub enum Rule {
     /// The field under validation must not exist in `anotherfield`'s values.
     NotInArray(String),
     /// The field under validation, if present, must be numeric.
+    ///
+    /// On success, will transform positive string input to U64 and
+    /// negative string input to I64.
     Numeric,
     /// The field under validation must be present in the input data but can be empty.
     Present,
