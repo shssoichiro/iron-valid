@@ -19,6 +19,7 @@ mod validators {
     pub mod confirmed;
     pub mod different;
     pub mod digits;
+    pub mod digits_between;
     pub mod email;
     pub mod filled;
     pub mod present;
@@ -185,6 +186,12 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 }
                 Rule::Digits(digits) => {
                     validators::digits::validate_digits(&new_values, field, digits)
+                }
+                Rule::DigitsBetween(min, max) => {
+                    validators::digits_between::validate_digits_between(&new_values,
+                                                                        field,
+                                                                        min,
+                                                                        max)
                 }
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 Rule::Filled => validators::filled::validate_filled(&new_values, field),
