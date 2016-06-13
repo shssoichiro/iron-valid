@@ -18,6 +18,7 @@ mod validators {
     pub mod boolean;
     pub mod confirmed;
     pub mod different;
+    pub mod digits;
     pub mod email;
     pub mod filled;
     pub mod present;
@@ -65,13 +66,15 @@ pub enum Rule {
     /// The field under validation, if present,
     /// must be numeric and must have an exact length of value.
     ///
-    /// On success, will transform positive string input to U64 and
-    /// negative string input to I64.
+    /// For negative numbers, the negative sign is not counted as a digit.
+    /// For floating point numbers, the number of digits preceeding the decimal place
+    /// is counted.
+    ///
+    /// On success, will transform string input to a numeric type.
     Digits(usize),
     /// The field under validation, if present, must have a length between the given min and max.
     ///
-    /// On success, will transform positive string input to U64 and
-    /// negative string input to I64.
+    /// On success, will transform string input to a numeric type.
     DigitsBetween(usize, usize),
     /// When working with arrays, the field under validation must not have any duplicate values
     /// if it is present.
@@ -86,8 +89,7 @@ pub enum Rule {
     InArray(String),
     /// The field under validation, if present, must be an integer.
     ///
-    /// On success, will transform positive string input to U64 and
-    /// negative string input to I64.
+    /// On success, will transform string input to a numeric type.
     Integer,
     /// The field under validation, if present, must be an IP address.
     IpAddress,
@@ -105,8 +107,7 @@ pub enum Rule {
     NotInArray(String),
     /// The field under validation, if present, must be numeric.
     ///
-    /// On success, will transform positive string input to U64 and
-    /// negative string input to I64.
+    /// On success, will transform string input to a numeric type.
     Numeric,
     /// The field under validation must be present in the input data but can be empty.
     Present,
@@ -181,6 +182,9 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Confirmed => validators::confirmed::validate_confirmed(&new_values, field),
                 Rule::Different(ref other) => {
                     validators::different::validate_different(&new_values, field, other)
+                }
+                Rule::Digits(digits) => {
+                    validators::digits::validate_digits(&new_values, field, digits)
                 }
                 Rule::Email => validators::email::validate_email(&new_values, field),
                 Rule::Filled => validators::filled::validate_filled(&new_values, field),
