@@ -19,6 +19,7 @@ mod validators {
     pub mod confirmed;
     pub mod different;
     pub mod email;
+    pub mod filled;
     pub mod present;
     pub mod same;
 }
@@ -182,6 +183,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                     validators::different::validate_different(&new_values, field, other)
                 }
                 Rule::Email => validators::email::validate_email(&new_values, field),
+                Rule::Filled => validators::filled::validate_filled(&new_values, field),
                 Rule::Present => validators::present::validate_present(&new_values, field),
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 _ => {
