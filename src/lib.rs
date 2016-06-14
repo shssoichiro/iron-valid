@@ -180,6 +180,10 @@ pub enum Rule {
     Url,
 }
 
+/// Validate a map of `values` against a map of `rules`.
+///
+/// Returns a `Result` containing a map of post-processed `values`,
+/// or a map of validation error messages.
 pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 values: Map)
                 -> Result<Map, BTreeMap<&str, Vec<String>>> {
