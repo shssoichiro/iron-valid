@@ -30,6 +30,7 @@ mod validators {
     pub mod min;
     pub mod numeric;
     pub mod present;
+    pub mod regex;
     pub mod same;
     pub mod size;
     pub mod string;
@@ -72,7 +73,7 @@ pub enum Rule {
     /// a matching `password_confirmation` field must be present in the input.
     Confirmed,
     /// The field under validation must have a different value than `field`.
-    Different(String),
+    Different(&'static str),
     /// The field under validation, if present,
     /// must be numeric and must have an exact length of value.
     ///
@@ -96,7 +97,7 @@ pub enum Rule {
     /// The field under validation, if present, must be included in the given list of values.
     In(Vec<Value>),
     /// The field under validation, if present, must exist in `anotherfield`'s values.
-    InArray(String),
+    InArray(&'static str),
     /// The field under validation, if present, must be an integer.
     ///
     /// On success, will transform string input to a numeric type.
@@ -114,7 +115,7 @@ pub enum Rule {
     /// The field under validation must not be included in the given list of values.
     NotIn(Vec<Value>),
     /// The field under validation must not exist in `anotherfield`'s values.
-    NotInArray(String),
+    NotInArray(&'static str),
     /// The field under validation, if present, must be numeric.
     ///
     /// On success, will transform string input to a numeric type.
@@ -122,7 +123,9 @@ pub enum Rule {
     /// The field under validation must be present in the input data but can be empty.
     Present,
     /// The field under validation, if present, must match the given regular expression.
-    Regex(String),
+    ///
+    /// On success, will transform input to a string.
+    Regex(&'static str),
     /// The field under validation must be present in the input data and not empty.
     /// A field is considered "empty" if one of the following conditions are true:
     ///
@@ -134,24 +137,24 @@ pub enum Rule {
     Required,
     /// The field under validation must be present if the `anotherfield` field
     /// is equal to any `value`.
-    RequiredIf(String, Value),
+    RequiredIf(&'static str, Value),
     /// The field under validation must be present unless the `anotherfield` field
     /// is equal to any `value`.
-    RequiredUnless(String, Value),
+    RequiredUnless(&'static str, Value),
     /// The field under validation must be present only if
     /// any of the other specified fields are present.
-    RequiredWith(Vec<String>),
+    RequiredWith(Vec<&'static str>),
     /// The field under validation must be present only if
     /// all of the other specified fields are present.
-    RequiredWithAll(Vec<String>),
+    RequiredWithAll(Vec<&'static str>),
     /// The field under validation must be present only when
     /// any of the other specified fields are not present.
-    RequiredWithout(Vec<String>),
+    RequiredWithout(Vec<&'static str>),
     /// The field under validation must be present only when
     /// all of the other specified fields are not present.
-    RequiredWithoutAll(Vec<String>),
+    RequiredWithoutAll(Vec<&'static str>),
     /// The given field must match the field under validation.
-    Same(String),
+    Same(&'static str),
     /// The field under validation must have a size matching the given value.
     ///
     /// For string data, value corresponds to the number of characters.
@@ -216,6 +219,9 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
                 Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),
                 Rule::Present => validators::present::validate_present(&new_values, field),
+                Rule::Regex(ref pattern) => {
+                    validators::regex::validate_regex(&new_values, field, pattern)
+                }
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),

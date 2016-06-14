@@ -14,7 +14,7 @@ fn test_in_array_valid_string() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -32,7 +32,7 @@ fn test_in_array_invalid_string() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -47,7 +47,7 @@ fn test_in_array_invalid_other_blank() {
     params.assign("in", Value::String("2".to_owned())).ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -65,7 +65,7 @@ fn test_in_array_valid_numeric() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -82,7 +82,7 @@ fn test_in_array_invalid_numeric() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -100,7 +100,7 @@ fn test_in_array_valid_empty() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -117,7 +117,7 @@ fn test_in_array_valid_blank() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
@@ -134,7 +134,7 @@ fn test_in_array_invalid_null() {
         .ok();
 
     let mut rules = BTreeMap::new();
-    rules.insert("in", vec![Rule::InArray("other".to_owned())]);
+    rules.insert("in", vec![Rule::InArray("other")]);
 
     let result = validate(rules, params);
 
