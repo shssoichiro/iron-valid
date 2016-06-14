@@ -35,6 +35,7 @@ mod validators {
     pub mod numeric;
     pub mod present;
     pub mod regex;
+    pub mod required;
     pub mod same;
     pub mod size;
     pub mod string;
@@ -233,6 +234,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Regex(ref pattern) => {
                     validators::regex::validate_regex(&new_values, field, pattern)
                 }
+                Rule::Required => validators::required::validate_required(&new_values, field),
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),
