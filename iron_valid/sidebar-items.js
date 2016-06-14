@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Rule",""]],"fn":[["validate",""]]});
+initSidebarItems({"enum":[["Rule",""]],"fn":[["validate","Validate a map of `values` against a map of `rules`."]]});
