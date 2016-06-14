@@ -10,5 +10,8 @@ params = "^0.2.2"
 regex = "^0.1.71"
 rustc-serialize = "^0.3.19"
 
+[dependencies.url]
+git = "https://github.com/servo/rust-url"
+
 [dev-dependencies]
 multipart = "^0.7.0"

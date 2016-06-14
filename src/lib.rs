@@ -4,6 +4,7 @@ extern crate lazy_static;
 extern crate params;
 extern crate regex;
 extern crate rustc_serialize;
+extern crate url;
 
 use params::{Map, Value};
 use std::collections::BTreeMap;
@@ -37,6 +38,7 @@ mod validators {
     pub mod same;
     pub mod size;
     pub mod string;
+    pub mod url;
 }
 
 #[derive(Debug,Clone)]
@@ -171,7 +173,9 @@ pub enum Rule {
     /// The field under validation, if present, must be a string.
     String,
     /// The field under validation, if present, must be formatted as a valid URL,
-    /// but does not need to resolve to a real website.
+    /// but does not need to resolve to a real website. The URL must contain the scheme
+    /// or else it will fail validation. For example, `http://google.com` will
+    /// pass validation, but `google.com` will fail validation.
     Url,
 }
 
@@ -232,6 +236,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),
+                Rule::Url => validators::url::validate_url(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
                                    rule,
