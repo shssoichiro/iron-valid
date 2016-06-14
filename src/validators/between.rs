@@ -15,43 +15,43 @@ pub fn validate_between(values: &Map,
             }
             assert!(min >= 0);
             assert!(max >= 0);
-            if value.len() < min as usize || value.len() > max as usize {
+            if value.len() >= min as usize && value.len() <= max as usize {
+                Ok(None)
+            } else {
                 Err(format!("The {} field must be between {} and {} characters.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         Some(&Value::U64(ref value)) => {
-            if (min > 0 && *value < min as u64) || (max < 0 || *value > max as u64) {
+            if (min <= 0 || *value >= min as u64) && (max >= 0 && *value <= max as u64) {
+                Ok(None)
+            } else {
                 Err(format!("The {} field must be between {} and {}.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         Some(&Value::I64(ref value)) => {
-            if *value < min as i64 || *value > max as i64 {
+            if *value >= min as i64 && *value <= max as i64 {
+                Ok(None)
+            } else {
                 Err(format!("The {} field must be between {} and {}.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         Some(&Value::F64(ref value)) => {
-            if *value < min as f64 || *value > max as f64 {
+            if *value >= min as f64 && *value <= max as f64 {
+                Ok(None)
+            } else {
                 Err(format!("The {} field must be between {} and {}.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         Some(&Value::Array(ref value)) => {
@@ -61,13 +61,13 @@ pub fn validate_between(values: &Map,
             }
             assert!(min >= 0);
             assert!(max >= 0);
-            if value.len() < min as usize || value.len() > max as usize {
+            if value.len() >= min as usize && value.len() <= max as usize {
+                Ok(None)
+            } else {
                 Err(format!("The {} field must have between {} and {} items.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         Some(&Value::Map(ref value)) => {
@@ -77,25 +77,25 @@ pub fn validate_between(values: &Map,
             }
             assert!(min >= 0);
             assert!(max >= 0);
-            if value.len() < min as usize || value.len() > max as usize {
+            if value.len() >= min as usize && value.len() <= max as usize {
+                Ok(None)
+            } else {
                 Err(format!("The {} field must have between {} and {} items.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         Some(&Value::File(ref value)) => {
             assert!(min >= 0);
             assert!(max >= 0);
-            if value.size() < (min as u64) << 10 || value.size() > (max as u64) << 10 {
+            if value.size() >> 10 >= min as u64 && value.size() >> 10 <= max as u64 {
+                Ok(None)
+            } else {
                 Err(format!("The {} must be between {} and {} kilobytes.",
                             field.to_lowercase().replace("_", " "),
                             min,
                             max))
-            } else {
-                Ok(None)
             }
         }
         None => {
