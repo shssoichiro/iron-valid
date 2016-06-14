@@ -24,6 +24,7 @@ mod validators {
     pub mod email;
     pub mod filled;
     pub mod in_const;
+    pub mod in_array;
     pub mod present;
     pub mod same;
 }
@@ -200,6 +201,9 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Filled => validators::filled::validate_filled(&new_values, field),
                 Rule::In(ref options) => {
                     validators::in_const::validate_in(&new_values, field, options)
+                }
+                Rule::InArray(ref other) => {
+                    validators::in_array::validate_in_array(&new_values, field, other)
                 }
                 Rule::Present => validators::present::validate_present(&new_values, field),
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),

@@ -10,7 +10,7 @@ pub fn validate_in(values: &Map, field: &str, options: &[Value]) -> Result<Optio
                 Ok(None)
             } else {
                 Err(format!("The {} field must be among the options: {:?}.",
-                            field,
+                            field.to_lowercase().replace("_", " "),
                             options))
             }
         }
