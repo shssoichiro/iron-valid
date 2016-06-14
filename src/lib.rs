@@ -26,6 +26,7 @@ mod validators {
     pub mod in_const;
     pub mod in_array;
     pub mod integer;
+    pub mod ip_address;
     pub mod max;
     pub mod min;
     pub mod numeric;
@@ -103,6 +104,8 @@ pub enum Rule {
     /// On success, will transform string input to a numeric type.
     Integer,
     /// The field under validation, if present, must be an IP address.
+    ///
+    /// Accepts both IPv4 and IPv6 addresses.
     IpAddress,
     /// The field under validation, if present, must be a valid JSON string.
     Json,
@@ -215,6 +218,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                     validators::in_array::validate_in_array(&new_values, field, other)
                 }
                 Rule::Integer => validators::integer::validate_integer(&new_values, field),
+                Rule::IpAddress => validators::ip_address::validate_ip_address(&new_values, field),
                 Rule::Max(target) => validators::max::validate_max(&new_values, field, target),
                 Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
                 Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),
