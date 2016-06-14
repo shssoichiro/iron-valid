@@ -3,6 +3,7 @@ extern crate dns_lookup;
 extern crate lazy_static;
 extern crate params;
 extern crate regex;
+extern crate rustc_serialize;
 
 use params::{Map, Value};
 use std::collections::BTreeMap;
@@ -27,6 +28,7 @@ mod validators {
     pub mod in_array;
     pub mod integer;
     pub mod ip_address;
+    pub mod json;
     pub mod max;
     pub mod min;
     pub mod numeric;
@@ -219,6 +221,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 }
                 Rule::Integer => validators::integer::validate_integer(&new_values, field),
                 Rule::IpAddress => validators::ip_address::validate_ip_address(&new_values, field),
+                Rule::Json => validators::json::validate_json(&new_values, field),
                 Rule::Max(target) => validators::max::validate_max(&new_values, field, target),
                 Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
                 Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),

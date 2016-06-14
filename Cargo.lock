@@ -7,6 +7,7 @@ dependencies = [
  "multipart 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "params 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.1.71 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
