@@ -29,6 +29,7 @@ mod validators {
     pub mod numeric;
     pub mod present;
     pub mod same;
+    pub mod size;
     pub mod string;
 }
 
@@ -212,6 +213,7 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),
                 Rule::Present => validators::present::validate_present(&new_values, field),
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
+                Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),
                 _ => {
                     panic!(format!("Unrecognized validation rule {:?} for field {:?}",
