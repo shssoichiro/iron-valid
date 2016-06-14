@@ -33,6 +33,7 @@ mod validators {
     pub mod max;
     pub mod min;
     pub mod not_in;
+    pub mod not_in_array;
     pub mod numeric;
     pub mod present;
     pub mod regex;
@@ -236,6 +237,9 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
                 Rule::NotIn(ref options) => {
                     validators::not_in::validate_not_in(&new_values, field, options)
+                }
+                Rule::NotInArray(ref other) => {
+                    validators::not_in_array::validate_not_in_array(&new_values, field, other)
                 }
                 Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),
                 Rule::Present => validators::present::validate_present(&new_values, field),
