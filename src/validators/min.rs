@@ -1,5 +1,4 @@
 use params::{Map, Value};
-use std::f64;
 
 pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<Value>, String> {
     match values.find(&[field]) {
