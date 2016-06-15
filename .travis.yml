@@ -4,3 +4,5 @@ rust:
   - stable
   - beta
   - nightly
+cache: cargo
+script: cargo build --verbose && CARGO_BUILD_JOBS=2 cargo test --verbose
