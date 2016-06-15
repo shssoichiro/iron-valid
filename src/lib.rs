@@ -39,6 +39,7 @@ mod validators {
     pub mod regex;
     pub mod required;
     pub mod required_if;
+    pub mod required_with;
     pub mod same;
     pub mod size;
     pub mod string;
@@ -253,6 +254,9 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                                                                   field,
                                                                   other,
                                                                   condition)
+                }
+                Rule::RequiredWith(ref other) => {
+                    validators::required_with::validate_required_with(&new_values, field, other)
                 }
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
