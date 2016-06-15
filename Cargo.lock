@@ -8,7 +8,7 @@ dependencies = [
  "params 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.1.71 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.1.1 (git+https://github.com/servo/rust-url)",
+ "url 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -132,16 +132,6 @@ dependencies = [
  "typeable 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicase 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "url 0.5.9 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "idna"
-version = "0.1.0"
-source = "git+https://github.com/servo/rust-url#dc963b72e5bc4f3911b8616b25a2140e77db2e89"
-dependencies = [
- "matches 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-bidi 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-normalization 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -626,15 +616,6 @@ dependencies = [
  "unicode-bidi 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicode-normalization 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "uuid 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "url"
-version = "1.1.1"
-source = "git+https://github.com/servo/rust-url#dc963b72e5bc4f3911b8616b25a2140e77db2e89"
-dependencies = [
- "idna 0.1.0 (git+https://github.com/servo/rust-url)",
- "matches 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

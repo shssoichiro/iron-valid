@@ -18,9 +18,7 @@ lazy_static = "^0.2.1"
 params = "^0.2.2"
 regex = "^0.1.71"
 rustc-serialize = "^0.3.19"
-
-[dependencies.url]
-git = "https://github.com/servo/rust-url"
+url = "^1.1.1"
 
 [dev-dependencies]
 multipart = "^0.7.0"
