@@ -1,7 +1,16 @@
 [package]
 authors = ["Joshua Holmer <jholmer.in@gmail.com>"]
 name = "iron_valid"
-version = "0.0.1"
+version = "0.1.0"
+description = "Request validation library for iron, based on Laravel's validation"
+license = "MIT"
+documentation = "http://shssoichiro.github.io/iron-valid/iron_valid/"
+homepage = "https://github.com/shssoichiro/iron-valid"
+repository = "https://github.com/shssoichiro/iron-valid"
+exclude = [
+  "tests/*",
+  "bench/*",
+]
 
 [dependencies]
 dns-lookup = "^0.2.0"
