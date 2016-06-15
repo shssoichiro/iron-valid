@@ -42,6 +42,7 @@ mod validators {
     pub mod required_unless;
     pub mod required_with;
     pub mod required_with_all;
+    pub mod required_without;
     pub mod same;
     pub mod size;
     pub mod string;
@@ -270,6 +271,11 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                     validators::required_with_all::validate_required_with_all(&new_values,
                                                                               field,
                                                                               other)
+                }
+                Rule::RequiredWithout(ref other) => {
+                    validators::required_without::validate_required_without(&new_values,
+                                                                            field,
+                                                                            other)
                 }
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
