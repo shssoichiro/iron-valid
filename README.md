@@ -24,7 +24,7 @@ use std::collections::BTreeMap;
 
 pub fn register(req: &mut Request) -> IronResult<Response> {
     let params = match req.get_ref::<Params>() {
-        Ok(p) => p,
+        Ok(p) => p.clone(),
         Err(_) => {
             return Ok(Response::with((status::BadRequest)));
         }
