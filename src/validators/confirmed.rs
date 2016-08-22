@@ -1,5 +1,6 @@
-use params::{Map, Value};
 use std::f64;
+
+use params::{Map, Value};
 
 pub fn validate_confirmed(values: &Map, field: &str) -> Result<Option<Value>, String> {
     match values.find(&[field]) {

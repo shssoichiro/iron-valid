@@ -1,5 +1,6 @@
-use params::{Map, Value};
 use regex::Regex;
+
+use params::{Map, Value};
 
 pub fn validate_regex(values: &Map, field: &str, pattern: &str) -> Result<Option<Value>, String> {
     let pattern = match Regex::new(pattern) {
