@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/joshuaholmer/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-0.1.71/src/prog.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/joshua.holmer/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-0.1.73/src/prog.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>prog.rs.html -- source</title>
@@ -468,36 +468,6 @@
 <span id="424">424</span>
 <span id="425">425</span>
 <span id="426">426</span>
-<span id="427">427</span>
-<span id="428">428</span>
-<span id="429">429</span>
-<span id="430">430</span>
-<span id="431">431</span>
-<span id="432">432</span>
-<span id="433">433</span>
-<span id="434">434</span>
-<span id="435">435</span>
-<span id="436">436</span>
-<span id="437">437</span>
-<span id="438">438</span>
-<span id="439">439</span>
-<span id="440">440</span>
-<span id="441">441</span>
-<span id="442">442</span>
-<span id="443">443</span>
-<span id="444">444</span>
-<span id="445">445</span>
-<span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>collections</span>::<span class='ident'>HashMap</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cmp</span>::<span class='ident'>Ordering</span>;
@@ -850,36 +820,6 @@
     <span class='ident'>WordBoundaryAscii</span>,
     <span class='doccomment'>/// Not ASCII word boundary.</span>
     <span class='ident'>NotWordBoundaryAscii</span>,
-}
-
-<span class='kw'>impl</span> <span class='ident'>InstEmptyLook</span> {
-    <span class='doccomment'>/// Tests whether the pair of characters matches this zero-width</span>
-    <span class='doccomment'>/// instruction.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>matches</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>c1</span>: <span class='ident'>Char</span>, <span class='ident'>c2</span>: <span class='ident'>Char</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>EmptyLook</span>::<span class='op'>*</span>;
-        <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>look</span> {
-            <span class='ident'>StartLine</span> <span class='op'>=&gt;</span> <span class='ident'>c1</span>.<span class='ident'>is_none</span>() <span class='op'>||</span> <span class='ident'>c1</span> <span class='op'>==</span> <span class='string'>&#39;\n&#39;</span>,
-            <span class='ident'>EndLine</span> <span class='op'>=&gt;</span> <span class='ident'>c2</span>.<span class='ident'>is_none</span>() <span class='op'>||</span> <span class='ident'>c2</span> <span class='op'>==</span> <span class='string'>&#39;\n&#39;</span>,
-            <span class='ident'>StartText</span> <span class='op'>=&gt;</span> <span class='ident'>c1</span>.<span class='ident'>is_none</span>(),
-            <span class='ident'>EndText</span> <span class='op'>=&gt;</span> <span class='ident'>c2</span>.<span class='ident'>is_none</span>(),
-            <span class='ident'>WordBoundary</span> <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> (<span class='ident'>w1</span>, <span class='ident'>w2</span>) <span class='op'>=</span> (<span class='ident'>c1</span>.<span class='ident'>is_word_char</span>(), <span class='ident'>c2</span>.<span class='ident'>is_word_char</span>());
-                <span class='ident'>w1</span> <span class='op'>^</span> <span class='ident'>w2</span>
-            }
-            <span class='ident'>NotWordBoundary</span> <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> (<span class='ident'>w1</span>, <span class='ident'>w2</span>) <span class='op'>=</span> (<span class='ident'>c1</span>.<span class='ident'>is_word_char</span>(), <span class='ident'>c2</span>.<span class='ident'>is_word_char</span>());
-                <span class='op'>!</span>(<span class='ident'>w1</span> <span class='op'>^</span> <span class='ident'>w2</span>)
-            }
-            <span class='ident'>WordBoundaryAscii</span> <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> (<span class='ident'>w1</span>, <span class='ident'>w2</span>) <span class='op'>=</span> (<span class='ident'>c1</span>.<span class='ident'>is_word_byte</span>(), <span class='ident'>c2</span>.<span class='ident'>is_word_byte</span>());
-                <span class='ident'>w1</span> <span class='op'>^</span> <span class='ident'>w2</span>
-            }
-            <span class='ident'>NotWordBoundaryAscii</span> <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> (<span class='ident'>w1</span>, <span class='ident'>w2</span>) <span class='op'>=</span> (<span class='ident'>c1</span>.<span class='ident'>is_word_byte</span>(), <span class='ident'>c2</span>.<span class='ident'>is_word_byte</span>());
-                <span class='op'>!</span>(<span class='ident'>w1</span> <span class='op'>^</span> <span class='ident'>w2</span>)
-            }
-        }
-    }
 }
 
 <span class='doccomment'>/// Representation of the Char instruction.</span>

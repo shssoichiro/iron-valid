@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/joshuaholmer/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-syntax-0.3.3/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/joshua.holmer/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-syntax-0.3.4/src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -2008,6 +2008,12 @@
 <span id="1964">1964</span>
 <span id="1965">1965</span>
 <span id="1966">1966</span>
+<span id="1967">1967</span>
+<span id="1968">1968</span>
+<span id="1969">1969</span>
+<span id="1970">1970</span>
+<span id="1971">1971</span>
+<span id="1972">1972</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2014-2015 The Rust Project Developers. See the COPYRIGHT</span>
 <span class='comment'>// file at the top-level directory of this distribution and at</span>
@@ -3347,6 +3353,9 @@ assert_eq!(err.kind(), &amp;ErrorKind::UnclosedParen);
     <span class='doccomment'>/// This never returned if the parser is permitted to allow expressions</span>
     <span class='doccomment'>/// that match arbitrary bytes.</span>
     <span class='ident'>InvalidUtf8</span>,
+    <span class='doccomment'>/// A character class was constructed such that it is empty.</span>
+    <span class='doccomment'>/// e.g., `[^\d\D]`.</span>
+    <span class='ident'>EmptyClass</span>,
     <span class='doccomment'>/// Hints that destructuring should not be exhaustive.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// This enum may grow additional variants, so this makes sure clients</span>
@@ -3409,6 +3418,7 @@ assert_eq!(err.kind(), &amp;ErrorKind::UnclosedParen);
             <span class='ident'>FlagNotAllowed</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;flag not allowed&quot;</span>,
             <span class='ident'>UnicodeNotAllowed</span> <span class='op'>=&gt;</span> <span class='string'>&quot;Unicode features not allowed&quot;</span>,
             <span class='ident'>InvalidUtf8</span> <span class='op'>=&gt;</span> <span class='string'>&quot;matching arbitrary bytes is not allowed&quot;</span>,
+            <span class='ident'>EmptyClass</span> <span class='op'>=&gt;</span> <span class='string'>&quot;empty character class&quot;</span>,
             <span class='ident'>__Nonexhaustive</span> <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>(),
         }
     }
@@ -3518,6 +3528,8 @@ assert_eq!(err.kind(), &amp;ErrorKind::UnclosedParen);
                            (u) flag is not set.&quot;</span>),
             <span class='ident'>InvalidUtf8</span> <span class='op'>=&gt;</span>
                 <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;Matching arbitrary bytes is not allowed.&quot;</span>),
+            <span class='ident'>EmptyClass</span> <span class='op'>=&gt;</span>
+                <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;Empty character classes are not allowed.&quot;</span>),
             <span class='ident'>__Nonexhaustive</span> <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>(),
         }
     }

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/joshuaholmer/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.7.13/src/ssl/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/joshua.holmer/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.7.14/src/ssl/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -1762,6 +1762,13 @@
 <span id="1718">1718</span>
 <span id="1719">1719</span>
 <span id="1720">1720</span>
+<span id="1721">1721</span>
+<span id="1722">1722</span>
+<span id="1723">1723</span>
+<span id="1724">1724</span>
+<span id="1725">1725</span>
+<span id="1726">1726</span>
+<span id="1727">1727</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_void</span>, <span class='ident'>c_long</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::<span class='ident'>TypeId</span>;
@@ -2331,6 +2338,9 @@
 
         <span class='kw'>let</span> <span class='ident'>ctx</span> <span class='op'>=</span> <span class='ident'>SslContext</span> { <span class='ident'>ctx</span>: <span class='ident'>ctx</span> };
 
+        <span class='comment'>// this is a bit dubious (?)</span>
+        <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ctx</span>.<span class='ident'>set_mode</span>(<span class='ident'>ffi</span>::<span class='ident'>SSL_MODE_AUTO_RETRY</span>));
+
         <span class='kw'>if</span> <span class='ident'>method</span>.<span class='ident'>is_dtls</span>() {
             <span class='ident'>ctx</span>.<span class='ident'>set_read_ahead</span>(<span class='number'>1</span>);
         }
@@ -2413,8 +2423,12 @@
         }
     }
 
+    <span class='kw'>fn</span> <span class='ident'>set_mode</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>c_long</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>SslError</span><span class='op'>&gt;</span> {
+        <span class='ident'>wrap_ssl_result</span>(<span class='kw'>unsafe</span> { <span class='ident'>ffi_extras</span>::<span class='ident'>SSL_CTX_set_mode</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span>) <span class='kw'>as</span> <span class='ident'>c_int</span> })
+    }
+
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_tmp_dh</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dh</span>: <span class='ident'>DH</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>SslError</span><span class='op'>&gt;</span> {
-        <span class='ident'>wrap_ssl_result</span>(<span class='kw'>unsafe</span> { <span class='ident'>ffi_extras</span>::<span class='ident'>SSL_CTX_set_tmp_dh</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>dh</span>.<span class='ident'>raw</span>()) <span class='kw'>as</span> <span class='ident'>i32</span> })
+        <span class='ident'>wrap_ssl_result</span>(<span class='kw'>unsafe</span> { <span class='ident'>ffi_extras</span>::<span class='ident'>SSL_CTX_set_tmp_dh</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>dh</span>.<span class='ident'>raw</span>()) <span class='kw'>as</span> <span class='ident'>c_int</span> })
     }
 
     <span class='doccomment'>/// Use the default locations of trusted certificates for verification.</span>

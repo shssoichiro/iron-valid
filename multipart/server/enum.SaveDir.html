@@ -53,18 +53,18 @@
     Perm(<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html' title='std::path::PathBuf'>PathBuf</a>),
 }</pre><div class='docblock'><p>The save directory for <code>Entries</code>. May be temporary (delete-on-drop) or permanent.</p>
 </div><h2 class='variants'>Variants</h2>
-<span id='variant.Temp' class='variant'><code>Temp(<a class='struct' href='../../tempdir/struct.TempDir.html' title='tempdir::TempDir'>TempDir</a>)</code></span><div class='docblock'><p>This directory is temporary and will be deleted, along with its contents, when this wrapper
+<span id='variant.Temp' class='variant'><span id='Temp.v' class='invisible'><code>Temp(<a class='struct' href='../../tempdir/struct.TempDir.html' title='tempdir::TempDir'>TempDir</a>)</code></span></span><div class='docblock'><p>This directory is temporary and will be deleted, along with its contents, when this wrapper
 is dropped.</p>
-</div><span id='variant.Perm' class='variant'><code>Perm(<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html' title='std::path::PathBuf'>PathBuf</a>)</code></span><div class='docblock'><p>This directory is permanent and will be left on the filesystem when this wrapper is dropped.</p>
+</div><span id='variant.Perm' class='variant'><span id='Perm.v' class='invisible'><code>Perm(<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html' title='std::path::PathBuf'>PathBuf</a>)</code></span></span><div class='docblock'><p>This directory is permanent and will be left on the filesystem when this wrapper is dropped.</p>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='enum' href='../../multipart/server/enum.SaveDir.html' title='multipart::server::SaveDir'>SaveDir</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1190' class='srclink' href='../../src/multipart/server/mod.rs.html#670-733' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.as_path' class='method'><code>fn <a href='#method.as_path' class='fnname'>as_path</a>(&amp;self) -&gt; &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a></code></h4>
+<div class='impl-items'><h4 id='method.as_path' class='method'><span id='as_path.v' class='invisible'><code>fn <a href='#method.as_path' class='fnname'>as_path</a>(&amp;self) -&gt; &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a></code></span></h4>
 <div class='docblock'><p>Get the path of this directory, either temporary or permanent.</p>
-</div><h4 id='method.is_temporary' class='method'><code>fn <a href='#method.is_temporary' class='fnname'>is_temporary</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h4 id='method.is_temporary' class='method'><span id='is_temporary.v' class='invisible'><code>fn <a href='#method.is_temporary' class='fnname'>is_temporary</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
 <div class='docblock'><p>Returns <code>true</code> if this is a temporary directory which will be deleted on-drop.</p>
-</div><h4 id='method.into_path' class='method'><code>fn <a href='#method.into_path' class='fnname'>into_path</a>(self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html' title='std::path::PathBuf'>PathBuf</a></code></h4>
+</div><h4 id='method.into_path' class='method'><span id='into_path.v' class='invisible'><code>fn <a href='#method.into_path' class='fnname'>into_path</a>(self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html' title='std::path::PathBuf'>PathBuf</a></code></span></h4>
 <div class='docblock'><p>Unwrap the <code>PathBuf</code> from <code>self</code>; if this is a temporary directory,
 it will be converted to a permanent one.</p>
-</div><h4 id='method.keep' class='method'><code>fn <a href='#method.keep' class='fnname'>keep</a>(&amp;mut self)</code></h4>
+</div><h4 id='method.keep' class='method'><span id='keep.v' class='invisible'><code>fn <a href='#method.keep' class='fnname'>keep</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p>If this <code>SaveDir</code> is temporary, convert it to permanent.
 This is a no-op if it already is permanent.</p>
 
@@ -75,7 +75,7 @@ time, usually on reboot or when free space is low.</p>
 
 <p>It is recommended that you relocate the files from a request which you want to keep to a 
 permanent folder on the filesystem.</p>
-</div><h4 id='method.delete' class='method'><code>fn <a href='#method.delete' class='fnname'>delete</a>(self) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+</div><h4 id='method.delete' class='method'><span id='delete.v' class='invisible'><code>fn <a href='#method.delete' class='fnname'>delete</a>(self) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></span></h4>
 <div class='docblock'><p>Delete this directory and its contents, regardless of its permanence.</p>
 
 <h3 id='warning-potential-data-loss-1' class='section-header'><a href='#warning-potential-data-loss-1'>Warning: Potential Data Loss</a></h3>
@@ -85,10 +85,10 @@ permanent folder on the filesystem.</p>
 manager applications which use a staging area from which deleted files can be safely
 recovered (i.e. Windows&#39; Recycle Bin, OS X&#39;s Trash Can, etc.).</p>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>&gt; for <a class='enum' href='../../multipart/server/enum.SaveDir.html' title='multipart::server::SaveDir'>SaveDir</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1214' class='srclink' href='../../src/multipart/server/mod.rs.html#735-739' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.as_ref' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html#tymethod.as_ref' class='fnname'>as_ref</a>(&amp;self) -&gt; &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a></code></h4>
+<div class='impl-items'><h4 id='method.as_ref' class='method'><span id='as_ref.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html#tymethod.as_ref' class='fnname'>as_ref</a>(&amp;self) -&gt; &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a></code></span></h4>
 <div class='docblock'><p>Performs the conversion.</p>
 </div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../multipart/server/enum.SaveDir.html' title='multipart::server::SaveDir'>SaveDir</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1217' class='srclink' href='../../src/multipart/server/mod.rs.html#743-752' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>

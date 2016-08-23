@@ -47,8 +47,8 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-931' class='srclink' href='../src/iron_valid/src/lib.rs.html#54-189' title='goto source code'>[src]</a></span></h1>
-<pre class='rust enum'>pub enum Rule {
+               </span><a id='src-1027' class='srclink' href='../src/iron_valid/src/lib.rs.html#60-206' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum Rule&lt;'a&gt; {
     Accepted,
     ActiveUrl,
     Alpha,
@@ -87,34 +87,35 @@
     Size(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>),
     String,
     Url,
+    // some variants omitted
 }</pre><h2 class='variants'>Variants</h2>
-<span id='variant.Accepted' class='variant'><code>Accepted</code></span><div class='docblock'><p>The field under validation must be <code>yes</code>, <code>on</code>, <code>1</code>, or <code>true</code>.
+<span id='variant.Accepted' class='variant'><span id='Accepted.v' class='invisible'><code>Accepted</code></span></span><div class='docblock'><p>The field under validation must be <code>yes</code>, <code>on</code>, <code>1</code>, or <code>true</code>.
 This is useful for validating &quot;Terms of Service&quot; acceptance.</p>
 
 <p>On success, will transform the input to a boolean <code>true</code>.</p>
-</div><span id='variant.ActiveUrl' class='variant'><code>ActiveUrl</code></span><div class='docblock'><p>The field under validation, if present, must be an active domain name.</p>
-</div><span id='variant.Alpha' class='variant'><code>Alpha</code></span><div class='docblock'><p>The field under validation must be entirely alphabetic characters.</p>
+</div><span id='variant.ActiveUrl' class='variant'><span id='ActiveUrl.v' class='invisible'><code>ActiveUrl</code></span></span><div class='docblock'><p>The field under validation, if present, must be an active domain name.</p>
+</div><span id='variant.Alpha' class='variant'><span id='Alpha.v' class='invisible'><code>Alpha</code></span></span><div class='docblock'><p>The field under validation must be entirely alphabetic characters.</p>
 
 <p>This validator accepts Latin and international (Unicode) input.</p>
-</div><span id='variant.AlphaDash' class='variant'><code>AlphaDash</code></span><div class='docblock'><p>The field under validation may have alpha-numeric characters,
+</div><span id='variant.AlphaDash' class='variant'><span id='AlphaDash.v' class='invisible'><code>AlphaDash</code></span></span><div class='docblock'><p>The field under validation may have alpha-numeric characters,
 as well as dashes and underscores.</p>
 
 <p>This validator accepts Latin and international (Unicode) input.</p>
-</div><span id='variant.AlphaNumeric' class='variant'><code>AlphaNumeric</code></span><div class='docblock'><p>The field under validation must be entirely alpha-numeric characters.</p>
+</div><span id='variant.AlphaNumeric' class='variant'><span id='AlphaNumeric.v' class='invisible'><code>AlphaNumeric</code></span></span><div class='docblock'><p>The field under validation must be entirely alpha-numeric characters.</p>
 
 <p>This validator accepts Latin and international (Unicode) input.</p>
-</div><span id='variant.Array' class='variant'><code>Array</code></span><div class='docblock'><p>The field under validation, if present, must be an array.</p>
-</div><span id='variant.Between' class='variant'><code>Between(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span><div class='docblock'><p>The field under validation, if present, must have a size between the given min and max.
+</div><span id='variant.Array' class='variant'><span id='Array.v' class='invisible'><code>Array</code></span></span><div class='docblock'><p>The field under validation, if present, must be an array.</p>
+</div><span id='variant.Between' class='variant'><span id='Between.v' class='invisible'><code>Between(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span></span><div class='docblock'><p>The field under validation, if present, must have a size between the given min and max.
 Strings, numerics, and files are evaluated in the same fashion as the <code>Size</code> rule.</p>
-</div><span id='variant.Boolean' class='variant'><code>Boolean</code></span><div class='docblock'><p>The field under validation, if present, must be able to be cast as a boolean.
+</div><span id='variant.Boolean' class='variant'><span id='Boolean.v' class='invisible'><code>Boolean</code></span></span><div class='docblock'><p>The field under validation, if present, must be able to be cast as a boolean.
 Accepted input are <code>true</code>, <code>false</code>, <code>1</code>, <code>0</code>, <code>&quot;1&quot;</code>, and <code>&quot;0&quot;</code>.</p>
 
 <p>On success, will transform the input to a boolean <code>true</code> or <code>false</code>.</p>
-</div><span id='variant.Confirmed' class='variant'><code>Confirmed</code></span><div class='docblock'><p>The field under validation must have a matching field of <code>foo_confirmation</code>.
+</div><span id='variant.Confirmed' class='variant'><span id='Confirmed.v' class='invisible'><code>Confirmed</code></span></span><div class='docblock'><p>The field under validation must have a matching field of <code>foo_confirmation</code>.
 For example, if the field under validation is <code>password</code>,
 a matching <code>password_confirmation</code> field must be present in the input.</p>
-</div><span id='variant.Different' class='variant'><code>Different(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span><div class='docblock'><p>The field under validation must have a different value than <code>field</code>.</p>
-</div><span id='variant.Digits' class='variant'><code>Digits(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></span><div class='docblock'><p>The field under validation, if present,
+</div><span id='variant.Different' class='variant'><span id='Different.v' class='invisible'><code>Different(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></span><div class='docblock'><p>The field under validation must have a different value than <code>field</code>.</p>
+</div><span id='variant.Digits' class='variant'><span id='Digits.v' class='invisible'><code>Digits(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></span></span><div class='docblock'><p>The field under validation, if present,
 must be numeric and must have an exact length of value.</p>
 
 <p>For negative numbers, the negative sign is not counted as a digit.
@@ -122,36 +123,36 @@ For floating point numbers, the number of digits preceeding the decimal place
 is counted.</p>
 
 <p>On success, will transform string input to a numeric type.</p>
-</div><span id='variant.DigitsBetween' class='variant'><code>DigitsBetween(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></span><div class='docblock'><p>The field under validation, if present, must have a length between the given min and max.</p>
+</div><span id='variant.DigitsBetween' class='variant'><span id='DigitsBetween.v' class='invisible'><code>DigitsBetween(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></span></span><div class='docblock'><p>The field under validation, if present, must have a length between the given min and max.</p>
 
 <p>On success, will transform string input to a numeric type.</p>
-</div><span id='variant.Distinct' class='variant'><code>Distinct</code></span><div class='docblock'><p>When working with arrays, the field under validation must not have any duplicate values
+</div><span id='variant.Distinct' class='variant'><span id='Distinct.v' class='invisible'><code>Distinct</code></span></span><div class='docblock'><p>When working with arrays, the field under validation must not have any duplicate values
 if it is present.</p>
-</div><span id='variant.Email' class='variant'><code>Email</code></span><div class='docblock'><p>The field under validation, if present, must be formatted as an e-mail address.</p>
-</div><span id='variant.Filled' class='variant'><code>Filled</code></span><div class='docblock'><p>The field under validation must not be empty when it is present.</p>
-</div><span id='variant.In' class='variant'><code>In(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>&gt;)</code></span><div class='docblock'><p>The field under validation, if present, must be included in the given list of values.</p>
-</div><span id='variant.InArray' class='variant'><code>InArray(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span><div class='docblock'><p>The field under validation, if present, must exist in <code>anotherfield</code>&#39;s values.</p>
-</div><span id='variant.Integer' class='variant'><code>Integer</code></span><div class='docblock'><p>The field under validation, if present, must be an integer.</p>
+</div><span id='variant.Email' class='variant'><span id='Email.v' class='invisible'><code>Email</code></span></span><div class='docblock'><p>The field under validation, if present, must be formatted as an e-mail address.</p>
+</div><span id='variant.Filled' class='variant'><span id='Filled.v' class='invisible'><code>Filled</code></span></span><div class='docblock'><p>The field under validation must not be empty when it is present.</p>
+</div><span id='variant.In' class='variant'><span id='In.v' class='invisible'><code>In(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>&gt;)</code></span></span><div class='docblock'><p>The field under validation, if present, must be included in the given list of values.</p>
+</div><span id='variant.InArray' class='variant'><span id='InArray.v' class='invisible'><code>InArray(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></span><div class='docblock'><p>The field under validation, if present, must exist in <code>anotherfield</code>&#39;s values.</p>
+</div><span id='variant.Integer' class='variant'><span id='Integer.v' class='invisible'><code>Integer</code></span></span><div class='docblock'><p>The field under validation, if present, must be an integer.</p>
 
 <p>On success, will transform string input to a numeric type.</p>
-</div><span id='variant.IpAddress' class='variant'><code>IpAddress</code></span><div class='docblock'><p>The field under validation, if present, must be an IP address.</p>
+</div><span id='variant.IpAddress' class='variant'><span id='IpAddress.v' class='invisible'><code>IpAddress</code></span></span><div class='docblock'><p>The field under validation, if present, must be an IP address.</p>
 
 <p>Accepts both IPv4 and IPv6 addresses.</p>
-</div><span id='variant.Json' class='variant'><code>Json</code></span><div class='docblock'><p>The field under validation, if present, must be a valid JSON string.</p>
-</div><span id='variant.Max' class='variant'><code>Max(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span><div class='docblock'><p>The field under validation, if present, must be less than or equal to a maximum value.
+</div><span id='variant.Json' class='variant'><span id='Json.v' class='invisible'><code>Json</code></span></span><div class='docblock'><p>The field under validation, if present, must be a valid JSON string.</p>
+</div><span id='variant.Max' class='variant'><span id='Max.v' class='invisible'><code>Max(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span></span><div class='docblock'><p>The field under validation, if present, must be less than or equal to a maximum value.
 Strings, numerics, and files are evaluated in the same fashion as the <code>Size</code> rule.</p>
-</div><span id='variant.Min' class='variant'><code>Min(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span><div class='docblock'><p>The field under validation, if present, must have a minimum value.
+</div><span id='variant.Min' class='variant'><span id='Min.v' class='invisible'><code>Min(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span></span><div class='docblock'><p>The field under validation, if present, must have a minimum value.
 Strings, numerics, and files are evaluated in the same fashion as the <code>Size</code> rule.</p>
-</div><span id='variant.NotIn' class='variant'><code>NotIn(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>&gt;)</code></span><div class='docblock'><p>The field under validation must not be included in the given list of values.</p>
-</div><span id='variant.NotInArray' class='variant'><code>NotInArray(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span><div class='docblock'><p>The field under validation must not exist in <code>anotherfield</code>&#39;s values.</p>
-</div><span id='variant.Numeric' class='variant'><code>Numeric</code></span><div class='docblock'><p>The field under validation, if present, must be numeric.</p>
+</div><span id='variant.NotIn' class='variant'><span id='NotIn.v' class='invisible'><code>NotIn(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>&gt;)</code></span></span><div class='docblock'><p>The field under validation must not be included in the given list of values.</p>
+</div><span id='variant.NotInArray' class='variant'><span id='NotInArray.v' class='invisible'><code>NotInArray(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></span><div class='docblock'><p>The field under validation must not exist in <code>anotherfield</code>&#39;s values.</p>
+</div><span id='variant.Numeric' class='variant'><span id='Numeric.v' class='invisible'><code>Numeric</code></span></span><div class='docblock'><p>The field under validation, if present, must be numeric.</p>
 
 <p>On success, will transform string input to a numeric type.</p>
-</div><span id='variant.Present' class='variant'><code>Present</code></span><div class='docblock'><p>The field under validation must be present in the input data but can be empty.</p>
-</div><span id='variant.Regex' class='variant'><code>Regex(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span><div class='docblock'><p>The field under validation, if present, must match the given regular expression.</p>
+</div><span id='variant.Present' class='variant'><span id='Present.v' class='invisible'><code>Present</code></span></span><div class='docblock'><p>The field under validation must be present in the input data but can be empty.</p>
+</div><span id='variant.Regex' class='variant'><span id='Regex.v' class='invisible'><code>Regex(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></span><div class='docblock'><p>The field under validation, if present, must match the given regular expression.</p>
 
 <p>On success, will transform input to a string.</p>
-</div><span id='variant.Required' class='variant'><code>Required</code></span><div class='docblock'><p>The field under validation must be present in the input data and not empty.
+</div><span id='variant.Required' class='variant'><span id='Required.v' class='invisible'><code>Required</code></span></span><div class='docblock'><p>The field under validation must be present in the input data and not empty.
 A field is considered &quot;empty&quot; if one of the following conditions are true:</p>
 
 <p>The value is null.</p>
@@ -159,38 +160,38 @@ A field is considered &quot;empty&quot; if one of the following conditions are t
 <p>The value is an empty string.</p>
 
 <p>The value is an empty array or empty object.</p>
-</div><span id='variant.RequiredIf' class='variant'><code>RequiredIf(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,&nbsp;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>)</code></span><div class='docblock'><p>The field under validation must be present if the <code>anotherfield</code> field
+</div><span id='variant.RequiredIf' class='variant'><span id='RequiredIf.v' class='invisible'><code>RequiredIf(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,&nbsp;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>)</code></span></span><div class='docblock'><p>The field under validation must be present if the <code>anotherfield</code> field
 is equal to any <code>value</code>.</p>
-</div><span id='variant.RequiredUnless' class='variant'><code>RequiredUnless(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,&nbsp;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>)</code></span><div class='docblock'><p>The field under validation must be present unless the <code>anotherfield</code> field
+</div><span id='variant.RequiredUnless' class='variant'><span id='RequiredUnless.v' class='invisible'><code>RequiredUnless(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,&nbsp;<a class='enum' href='../params/enum.Value.html' title='params::Value'>Value</a>)</code></span></span><div class='docblock'><p>The field under validation must be present unless the <code>anotherfield</code> field
 is equal to any <code>value</code>.</p>
-</div><span id='variant.RequiredWith' class='variant'><code>RequiredWith(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span><div class='docblock'><p>The field under validation must be present only if
+</div><span id='variant.RequiredWith' class='variant'><span id='RequiredWith.v' class='invisible'><code>RequiredWith(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span></span><div class='docblock'><p>The field under validation must be present only if
 any of the other specified fields are present.</p>
-</div><span id='variant.RequiredWithAll' class='variant'><code>RequiredWithAll(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span><div class='docblock'><p>The field under validation must be present only if
+</div><span id='variant.RequiredWithAll' class='variant'><span id='RequiredWithAll.v' class='invisible'><code>RequiredWithAll(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span></span><div class='docblock'><p>The field under validation must be present only if
 all of the other specified fields are present.</p>
-</div><span id='variant.RequiredWithout' class='variant'><code>RequiredWithout(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span><div class='docblock'><p>The field under validation must be present only when
+</div><span id='variant.RequiredWithout' class='variant'><span id='RequiredWithout.v' class='invisible'><code>RequiredWithout(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span></span><div class='docblock'><p>The field under validation must be present only when
 any of the other specified fields are not present.</p>
-</div><span id='variant.RequiredWithoutAll' class='variant'><code>RequiredWithoutAll(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span><div class='docblock'><p>The field under validation must be present only when
+</div><span id='variant.RequiredWithoutAll' class='variant'><span id='RequiredWithoutAll.v' class='invisible'><code>RequiredWithoutAll(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;)</code></span></span><div class='docblock'><p>The field under validation must be present only when
 all of the other specified fields are not present.</p>
-</div><span id='variant.Same' class='variant'><code>Same(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span><div class='docblock'><p>The given field must match the field under validation.</p>
-</div><span id='variant.Size' class='variant'><code>Size(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span><div class='docblock'><p>The field under validation must have a size matching the given value.</p>
+</div><span id='variant.Same' class='variant'><span id='Same.v' class='invisible'><code>Same(&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></span><div class='docblock'><p>The given field must match the field under validation.</p>
+</div><span id='variant.Size' class='variant'><span id='Size.v' class='invisible'><code>Size(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a>)</code></span></span><div class='docblock'><p>The field under validation must have a size matching the given value.</p>
 
 <p>For string data, value corresponds to the number of characters.</p>
 
 <p>For numeric data, value corresponds to a given integer value.</p>
 
 <p>For files, size corresponds to the file size in kilobytes.</p>
-</div><span id='variant.String' class='variant'><code>String</code></span><div class='docblock'><p>The field under validation, if present, must be a string.</p>
-</div><span id='variant.Url' class='variant'><code>Url</code></span><div class='docblock'><p>The field under validation, if present, must be formatted as a valid URL,
+</div><span id='variant.String' class='variant'><span id='String.v' class='invisible'><code>String</code></span></span><div class='docblock'><p>The field under validation, if present, must be a string.</p>
+</div><span id='variant.Url' class='variant'><span id='Url.v' class='invisible'><code>Url</code></span></span><div class='docblock'><p>The field under validation, if present, must be formatted as a valid URL,
 but does not need to resolve to a real website. The URL must contain the scheme
 or else it will fail validation. For example, <code>http://google.com</code> will
 pass validation, but <code>google.com</code> will fail validation.</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../iron_valid/enum.Rule.html' title='iron_valid::Rule'>Rule</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-993' class='srclink' href='../src/iron_valid/src/lib.rs.html#53' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../iron_valid/enum.Rule.html' title='iron_valid::Rule'>Rule</a></code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../iron_valid/enum.Rule.html' title='iron_valid::Rule'>Rule</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-931' class='srclink' href='../src/iron_valid/src/lib.rs.html#59' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../iron_valid/enum.Rule.html' title='iron_valid::Rule'>Rule</a>&lt;'a&gt;</code></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
-</div><h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../iron_valid/enum.Rule.html' title='iron_valid::Rule'>Rule</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1019' class='srclink' href='../src/iron_valid/src/lib.rs.html#53' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../iron_valid/enum.Rule.html' title='iron_valid::Rule'>Rule</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-959' class='srclink' href='../src/iron_valid/src/lib.rs.html#59' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>

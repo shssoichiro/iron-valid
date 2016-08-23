@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/joshuaholmer/.cargo/registry/src/github.com-1ecc6299db9ec823/libc-0.2.12/src/unix/bsd/apple/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/joshua.holmer/.cargo/registry/src/github.com-1ecc6299db9ec823/libc-0.2.15/src/unix/bsd/apple/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -1452,6 +1452,18 @@
 <span id="1408">1408</span>
 <span id="1409">1409</span>
 <span id="1410">1410</span>
+<span id="1411">1411</span>
+<span id="1412">1412</span>
+<span id="1413">1413</span>
+<span id="1414">1414</span>
+<span id="1415">1415</span>
+<span id="1416">1416</span>
+<span id="1417">1417</span>
+<span id="1418">1418</span>
+<span id="1419">1419</span>
+<span id="1420">1420</span>
+<span id="1421">1421</span>
+<span id="1422">1422</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Apple (ios/darwin)-specific definitions</span>
 <span class='doccomment'>//!</span>
@@ -1567,6 +1579,11 @@
     <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>pthread_cond_t</span> {
         <span class='ident'>__sig</span>: ::<span class='ident'>c_long</span>,
         <span class='ident'>__opaque</span>: [<span class='ident'>u8</span>; <span class='ident'>__PTHREAD_COND_SIZE__</span>],
+    }
+
+    <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>pthread_condattr_t</span> {
+        <span class='ident'>__sig</span>: ::<span class='ident'>c_long</span>,
+        <span class='ident'>__opaque</span>: [<span class='ident'>u8</span>; <span class='ident'>__PTHREAD_CONDATTR_SIZE__</span>],
     }
 
     <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>pthread_rwlock_t</span> {
@@ -1841,8 +1858,15 @@
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>FILENAME_MAX</span>: ::<span class='ident'>c_uint</span> <span class='op'>=</span> <span class='number'>1024</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>L_tmpnam</span>: ::<span class='ident'>c_uint</span> <span class='op'>=</span> <span class='number'>1024</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>TMP_MAX</span>: ::<span class='ident'>c_uint</span> <span class='op'>=</span> <span class='number'>308915776</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_LINK_MAX</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>1</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_MAX_CANON</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>2</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_MAX_INPUT</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>3</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_NAME_MAX</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>4</span>;
-
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_PATH_MAX</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>5</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_PIPE_BUF</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>6</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_CHOWN_RESTRICTED</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>7</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_NO_TRUNC</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>8</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>_PC_VDISABLE</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>9</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>O_RDONLY</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>0</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>O_WRONLY</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>1</span>;
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>O_RDWR</span>: ::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='number'>2</span>;

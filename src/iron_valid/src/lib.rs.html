@@ -353,11 +353,40 @@
 <span id="309">309</span>
 <span id="310">310</span>
 <span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
 </pre><pre class='rust '>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>dns_lookup</span>;
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>lazy_static</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>params</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>postgres</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>regex</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>rustc_serialize</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>url</span>;
@@ -380,6 +409,8 @@
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>digits_between</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>distinct</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>email</span>;
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>exists</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>filled</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>in_const</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>in_array</span>;
@@ -403,11 +434,13 @@
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>same</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>size</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>string</span>;
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+    <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>unique</span>;
     <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>url</span>;
 }
 
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>,<span class='ident'>Clone</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Rule</span> {
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Rule</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='doccomment'>/// The field under validation must be `yes`, `on`, `1`, or `true`.</span>
     <span class='doccomment'>/// This is useful for validating &quot;Terms of Service&quot; acceptance.</span>
     <span class='doccomment'>///</span>
@@ -462,6 +495,10 @@
     <span class='ident'>Distinct</span>,
     <span class='doccomment'>/// The field under validation, if present, must be formatted as an e-mail address.</span>
     <span class='ident'>Email</span>,
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+    <span class='doccomment'>/// The field under validation must exist in the given table.</span>
+    <span class='doccomment'>/// A column name may be specified; otherwise, the name of the field is used.</span>
+    <span class='ident'>Exists</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>postgres</span>::<span class='ident'>Connection</span>, <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span><span class='op'>&gt;</span>),
     <span class='doccomment'>/// The field under validation must not be empty when it is present.</span>
     <span class='ident'>Filled</span>,
     <span class='doccomment'>/// The field under validation, if present, must be included in the given list of values.</span>
@@ -537,20 +574,27 @@
     <span class='ident'>Size</span>(<span class='ident'>isize</span>),
     <span class='doccomment'>/// The field under validation, if present, must be a string.</span>
     <span class='ident'>String</span>,
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+    <span class='doccomment'>/// The field under validation must not exist in the given table.</span>
+    <span class='doccomment'>/// A column name may be specified; otherwise, the name of the field is used.</span>
+    <span class='ident'>Unique</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>postgres</span>::<span class='ident'>Connection</span>, <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span><span class='op'>&gt;</span>),
     <span class='doccomment'>/// The field under validation, if present, must be formatted as a valid URL,</span>
     <span class='doccomment'>/// but does not need to resolve to a real website. The URL must contain the scheme</span>
     <span class='doccomment'>/// or else it will fail validation. For example, `http://google.com` will</span>
     <span class='doccomment'>/// pass validation, but `google.com` will fail validation.</span>
     <span class='ident'>Url</span>,
+    <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>))]</span>
+    <span class='ident'>Phantom</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>std</span>::<span class='ident'>marker</span>::<span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>),
 }
 
 <span class='doccomment'>/// Validate a map of `values` against a map of `rules`.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// Returns a `Result` containing a map of post-processed `values`,</span>
 <span class='doccomment'>/// or a map of validation error messages.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>validate</span>(<span class='ident'>rules</span>: <span class='ident'>BTreeMap</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Rule</span><span class='op'>&gt;&gt;</span>,
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>validate</span>(<span class='ident'>rules</span>: <span class='ident'>BTreeMap</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Rule</span><span class='op'>&gt;&gt;</span>,
                 <span class='ident'>values</span>: <span class='ident'>Map</span>)
-                <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Map</span>, <span class='ident'>BTreeMap</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> {
+                <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Map</span>, <span class='ident'>BTreeMap</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> {
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>new_values</span> <span class='op'>=</span> <span class='ident'>values</span>;
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>errors</span> <span class='op'>=</span> <span class='ident'>BTreeMap</span>::<span class='ident'>new</span>();
 
@@ -585,6 +629,10 @@
                 }
                 <span class='ident'>Rule</span>::<span class='ident'>Distinct</span> <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>distinct</span>::<span class='ident'>validate_distinct</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>),
                 <span class='ident'>Rule</span>::<span class='ident'>Email</span> <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>email</span>::<span class='ident'>validate_email</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>),
+                <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+                <span class='ident'>Rule</span>::<span class='ident'>Exists</span>(<span class='ident'>conn</span>, <span class='ident'>table</span>, <span class='ident'>column</span>) <span class='op'>=&gt;</span> {
+                    <span class='ident'>validators</span>::<span class='ident'>exists</span>::<span class='ident'>validate_exists</span>(<span class='ident'>conn</span>, <span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>, <span class='ident'>table</span>, <span class='ident'>column</span>)
+                }
                 <span class='ident'>Rule</span>::<span class='ident'>Filled</span> <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>filled</span>::<span class='ident'>validate_filled</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>),
                 <span class='ident'>Rule</span>::<span class='ident'>In</span>(<span class='kw-2'>ref</span> <span class='ident'>options</span>) <span class='op'>=&gt;</span> {
                     <span class='ident'>validators</span>::<span class='ident'>in_const</span>::<span class='ident'>validate_in</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>, <span class='ident'>options</span>)
@@ -642,7 +690,13 @@
                 <span class='ident'>Rule</span>::<span class='ident'>Same</span>(<span class='kw-2'>ref</span> <span class='ident'>other</span>) <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>same</span>::<span class='ident'>validate_same</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>, <span class='ident'>other</span>),
                 <span class='ident'>Rule</span>::<span class='ident'>Size</span>(<span class='ident'>target</span>) <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>size</span>::<span class='ident'>validate_size</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>, <span class='ident'>target</span>),
                 <span class='ident'>Rule</span>::<span class='ident'>String</span> <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>string</span>::<span class='ident'>validate_string</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>),
+                <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>)]</span>
+                <span class='ident'>Rule</span>::<span class='ident'>Unique</span>(<span class='ident'>conn</span>, <span class='ident'>table</span>, <span class='ident'>column</span>) <span class='op'>=&gt;</span> {
+                    <span class='ident'>validators</span>::<span class='ident'>unique</span>::<span class='ident'>validate_unique</span>(<span class='ident'>conn</span>, <span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>, <span class='ident'>table</span>, <span class='ident'>column</span>)
+                }
                 <span class='ident'>Rule</span>::<span class='ident'>Url</span> <span class='op'>=&gt;</span> <span class='ident'>validators</span>::<span class='ident'>url</span>::<span class='ident'>validate_url</span>(<span class='kw-2'>&amp;</span><span class='ident'>new_values</span>, <span class='ident'>field</span>),
+                <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;pg&quot;</span>))]</span>
+                <span class='ident'>Rule</span>::<span class='ident'>Phantom</span>(_) <span class='op'>=&gt;</span> <span class='macro'>unimplemented</span><span class='macro'>!</span>(),
             };
             <span class='kw'>match</span> <span class='ident'>result</span> {
                 <span class='prelude-val'>Ok</span>(<span class='prelude-val'>Some</span>(<span class='ident'>res</span>)) <span class='op'>=&gt;</span> {

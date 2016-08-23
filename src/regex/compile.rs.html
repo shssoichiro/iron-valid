@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/joshuaholmer/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-0.1.71/src/compile.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/joshua.holmer/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-0.1.73/src/compile.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>compile.rs.html -- source</title>
@@ -1130,6 +1130,7 @@
 <span id="1086">1086</span>
 <span id="1087">1087</span>
 <span id="1088">1088</span>
+<span id="1089">1089</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2014-2016 The Rust Project Developers. See the COPYRIGHT</span>
 <span class='comment'>// file at the top-level directory of this distribution and at</span>
@@ -1505,6 +1506,7 @@
     }
 
     <span class='kw'>fn</span> <span class='ident'>c_class</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>ranges</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>ClassRange</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span> {
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>ranges</span>.<span class='ident'>is_empty</span>());
         <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>compiled</span>.<span class='ident'>uses_bytes</span>() {
             <span class='ident'>CompileClass</span> {
                 <span class='ident'>c</span>: <span class='self'>self</span>,

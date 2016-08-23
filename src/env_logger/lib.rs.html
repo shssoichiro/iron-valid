@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/joshuaholmer/.cargo/registry/src/github.com-1ecc6299db9ec823/env_logger-0.3.3/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/joshua.holmer/.cargo/registry/src/github.com-1ecc6299db9ec823/env_logger-0.3.4/src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -647,6 +647,18 @@
 <span id="603">603</span>
 <span id="604">604</span>
 <span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2014-2015 The Rust Project Developers. See the COPYRIGHT</span>
 <span class='comment'>// file at the top-level directory of this distribution and at</span>
@@ -791,7 +803,8 @@
 
 <span class='kw'>use</span> <span class='ident'>log</span>::{<span class='ident'>Log</span>, <span class='ident'>LogLevel</span>, <span class='ident'>LogLevelFilter</span>, <span class='ident'>LogRecord</span>, <span class='ident'>SetLoggerError</span>, <span class='ident'>LogMetadata</span>};
 
-<span class='kw'>struct</span> <span class='ident'>Logger</span> {
+<span class='doccomment'>/// The logger.</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Logger</span> {
     <span class='ident'>directives</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>LogDirective</span><span class='op'>&gt;</span>,
     <span class='ident'>filter</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Regex</span><span class='op'>&gt;</span>,
     <span class='ident'>format</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Fn</span>(<span class='kw-2'>&amp;</span><span class='ident'>LogRecord</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> <span class='op'>+</span> <span class='ident'>Sync</span> <span class='op'>+</span> <span class='ident'>Send</span><span class='op'>&gt;</span>,
@@ -895,7 +908,15 @@
     <span class='doccomment'>/// global logger may only be initialized once. Future initialization</span>
     <span class='doccomment'>/// attempts will return an error.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>init</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>SetLoggerError</span><span class='op'>&gt;</span> {
+        <span class='ident'>log</span>::<span class='ident'>set_logger</span>(<span class='op'>|</span><span class='ident'>max_level</span><span class='op'>|</span> {
+            <span class='kw'>let</span> <span class='ident'>logger</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>build</span>();
+            <span class='ident'>max_level</span>.<span class='ident'>set</span>(<span class='ident'>logger</span>.<span class='ident'>filter</span>());
+            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>logger</span>)
+        })
+    }
 
+    <span class='doccomment'>/// Build an env logger.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>build</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Logger</span> {
         <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>directives</span>.<span class='ident'>is_empty</span>() {
             <span class='comment'>// Adds the default filter if none exist</span>
             <span class='self'>self</span>.<span class='ident'>directives</span>.<span class='ident'>push</span>(<span class='ident'>LogDirective</span> {
@@ -912,18 +933,6 @@
             });
         }
 
-        <span class='ident'>log</span>::<span class='ident'>set_logger</span>(<span class='op'>|</span><span class='ident'>max_level</span><span class='op'>|</span> {
-            <span class='kw'>let</span> <span class='ident'>level</span> <span class='op'>=</span> {
-                <span class='kw'>let</span> <span class='ident'>max</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>directives</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>level</span>).<span class='ident'>max</span>();
-                <span class='ident'>max</span>.<span class='ident'>unwrap_or</span>(<span class='ident'>LogLevelFilter</span>::<span class='ident'>Off</span>)
-            };
-            <span class='ident'>max_level</span>.<span class='ident'>set</span>(<span class='ident'>level</span>);
-
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>build</span>())
-        })
-    }
-
-    <span class='kw'>fn</span> <span class='ident'>build</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Logger</span> {
         <span class='ident'>Logger</span> {
             <span class='ident'>directives</span>: <span class='ident'>mem</span>::<span class='ident'>replace</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>directives</span>, <span class='ident'>Vec</span>::<span class='ident'>new</span>()),
             <span class='ident'>filter</span>: <span class='ident'>mem</span>::<span class='ident'>replace</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>filter</span>, <span class='prelude-val'>None</span>),
@@ -933,6 +942,21 @@
 }
 
 <span class='kw'>impl</span> <span class='ident'>Logger</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>Logger</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>builder</span> <span class='op'>=</span> <span class='ident'>LogBuilder</span>::<span class='ident'>new</span>();
+
+        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Ok</span>(<span class='ident'>s</span>) <span class='op'>=</span> <span class='ident'>env</span>::<span class='ident'>var</span>(<span class='string'>&quot;RUST_LOG&quot;</span>) {
+            <span class='ident'>builder</span>.<span class='ident'>parse</span>(<span class='kw-2'>&amp;</span><span class='ident'>s</span>);
+        }
+
+        <span class='ident'>builder</span>.<span class='ident'>build</span>()
+    }
+
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>filter</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>LogLevelFilter</span> {
+        <span class='self'>self</span>.<span class='ident'>directives</span>.<span class='ident'>iter</span>()
+            .<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>level</span>).<span class='ident'>max</span>()
+            .<span class='ident'>unwrap_or</span>(<span class='ident'>LogLevelFilter</span>::<span class='ident'>Off</span>)
+    }
 
     <span class='kw'>fn</span> <span class='ident'>enabled</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>level</span>: <span class='ident'>LogLevel</span>, <span class='ident'>target</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
         <span class='comment'>// Search for the longest match, the vector is assumed to be pre-sorted.</span>
@@ -1051,7 +1075,7 @@
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>tests</span> {
-    <span class='kw'>use</span> <span class='ident'>log</span>::{<span class='ident'>Log</span>, <span class='ident'>LogLevel</span>, <span class='ident'>LogLevelFilter</span>};
+    <span class='kw'>use</span> <span class='ident'>log</span>::{<span class='ident'>LogLevel</span>, <span class='ident'>LogLevelFilter</span>};
 
     <span class='kw'>use</span> <span class='kw'>super</span>::{<span class='ident'>LogBuilder</span>, <span class='ident'>Logger</span>, <span class='ident'>LogDirective</span>, <span class='ident'>parse_logging_spec</span>};
 

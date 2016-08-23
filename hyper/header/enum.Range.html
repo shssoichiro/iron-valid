@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3603' class='srclink' href='../../src/hyper/header/common/range.rs.html#59-65' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-3641' class='srclink' href='../../src/hyper/header/common/range.rs.html#59-65' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum Range {
     Bytes(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../hyper/header/enum.ByteRangeSpec.html' title='hyper::header::ByteRangeSpec'>ByteRangeSpec</a>&gt;),
     Unregistered(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>),
@@ -103,8 +103,8 @@ last-byte-pos = 1*DIGIT
 <span class='ident'>headers</span>.<span class='ident'>clear</span>();
 <span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>Range</span>::<span class='ident'>bytes_multi</span>(<span class='macro'>vec</span><span class='macro'>!</span>[(<span class='number'>1</span>, <span class='number'>100</span>), (<span class='number'>200</span>, <span class='number'>300</span>)]));</pre>
 </div><h2 class='variants'>Variants</h2>
-<span id='variant.Bytes' class='variant'><code>Bytes(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../hyper/header/enum.ByteRangeSpec.html' title='hyper::header::ByteRangeSpec'>ByteRangeSpec</a>&gt;)</code></span><div class='docblock'><p>Byte range</p>
-</div><span id='variant.Unregistered' class='variant'><code>Unregistered(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>)</code></span><div class='docblock'><p>Custom range, with unit not registered at IANA
+<span id='variant.Bytes' class='variant'><span id='Bytes.v' class='invisible'><code>Bytes(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../hyper/header/enum.ByteRangeSpec.html' title='hyper::header::ByteRangeSpec'>ByteRangeSpec</a>&gt;)</code></span></span><div class='docblock'><p>Byte range</p>
+</div><span id='variant.Unregistered' class='variant'><span id='Unregistered.v' class='invisible'><code>Unregistered(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>)</code></span></span><div class='docblock'><p>Custom range, with unit not registered at IANA
 (<code>other-range-unit</code>: String , <code>other-range-set</code>: String)</p>
 </div></section>
     <section id='search' class="content hidden"></section>
