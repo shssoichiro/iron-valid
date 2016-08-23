@@ -1,4 +1,5 @@
 use dns_lookup;
+
 use params::{Map, Value};
 
 pub fn validate_active_url(values: &Map, field: &str) -> Result<Option<Value>, String> {

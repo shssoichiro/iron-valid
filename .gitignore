@@ -1,3 +1,5 @@
 target
 *.bk
+Cargo.lock
 .DS_Store
+/.idea

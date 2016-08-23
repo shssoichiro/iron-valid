@@ -1,5 +1,6 @@
-use params::{Map, Value};
 use regex::Regex;
+
+use params::{Map, Value};
 
 pub fn validate_email(values: &Map, field: &str) -> Result<Option<Value>, String> {
     lazy_static! {

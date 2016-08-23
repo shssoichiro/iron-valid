@@ -1,6 +1,7 @@
-use params::{Map, Value};
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
+
+use params::{Map, Value};
 
 pub fn validate_ip_address(values: &Map, field: &str) -> Result<Option<Value>, String> {
     match values.find(&[field]) {

@@ -2,6 +2,8 @@ extern crate dns_lookup;
 #[macro_use]
 extern crate lazy_static;
 extern crate params;
+#[cfg(feature = "pg")]
+extern crate postgres;
 extern crate regex;
 extern crate rustc_serialize;
 extern crate url;
@@ -24,6 +26,8 @@ mod validators {
     pub mod digits_between;
     pub mod distinct;
     pub mod email;
+    #[cfg(feature = "pg")]
+    pub mod exists;
     pub mod filled;
     pub mod in_const;
     pub mod in_array;
@@ -47,11 +51,13 @@ mod validators {
     pub mod same;
     pub mod size;
     pub mod string;
+    #[cfg(feature = "pg")]
+    pub mod unique;
     pub mod url;
 }
 
 #[derive(Debug,Clone)]
-pub enum Rule {
+pub enum Rule<'a> {
     /// The field under validation must be `yes`, `on`, `1`, or `true`.
     /// This is useful for validating "Terms of Service" acceptance.
     ///
@@ -106,6 +112,10 @@ pub enum Rule {
     Distinct,
     /// The field under validation, if present, must be formatted as an e-mail address.
     Email,
+    #[cfg(feature = "pg")]
+    /// The field under validation must exist in the given table.
+    /// A column name may be specified; otherwise, the name of the field is used.
+    Exists(&'a postgres::Connection, &'static str, Option<&'static str>),
     /// The field under validation must not be empty when it is present.
     Filled,
     /// The field under validation, if present, must be included in the given list of values.
@@ -181,20 +191,27 @@ pub enum Rule {
     Size(isize),
     /// The field under validation, if present, must be a string.
     String,
+    #[cfg(feature = "pg")]
+    /// The field under validation must not exist in the given table.
+    /// A column name may be specified; otherwise, the name of the field is used.
+    Unique(&'a postgres::Connection, &'static str, Option<&'static str>),
     /// The field under validation, if present, must be formatted as a valid URL,
     /// but does not need to resolve to a real website. The URL must contain the scheme
     /// or else it will fail validation. For example, `http://google.com` will
     /// pass validation, but `google.com` will fail validation.
     Url,
+    #[doc(hidden)]
+    #[cfg(not(feature = "pg"))]
+    Phantom(&'a std::marker::PhantomData<u8>),
 }
 
 /// Validate a map of `values` against a map of `rules`.
 ///
 /// Returns a `Result` containing a map of post-processed `values`,
 /// or a map of validation error messages.
-pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
+pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 values: Map)
-                -> Result<Map, BTreeMap<&str, Vec<String>>> {
+                -> Result<Map, BTreeMap<&'static str, Vec<String>>> {
     let mut new_values = values;
     let mut errors = BTreeMap::new();
 
@@ -229,6 +246,10 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 }
                 Rule::Distinct => validators::distinct::validate_distinct(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
+                #[cfg(feature = "pg")]
+                Rule::Exists(conn, table, column) => {
+                    validators::exists::validate_exists(conn, &new_values, field, table, column)
+                }
                 Rule::Filled => validators::filled::validate_filled(&new_values, field),
                 Rule::In(ref options) => {
                     validators::in_const::validate_in(&new_values, field, options)
@@ -286,7 +307,13 @@ pub fn validate(rules: BTreeMap<&str, Vec<Rule>>,
                 Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),
+                #[cfg(feature = "pg")]
+                Rule::Unique(conn, table, column) => {
+                    validators::unique::validate_unique(conn, &new_values, field, table, column)
+                }
                 Rule::Url => validators::url::validate_url(&new_values, field),
+                #[cfg(not(feature = "pg"))]
+                Rule::Phantom(_) => unimplemented!(),
             };
             match result {
                 Ok(Some(res)) => {

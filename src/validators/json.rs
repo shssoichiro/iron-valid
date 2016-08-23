@@ -1,5 +1,6 @@
-use params::{Map, Value};
 use rustc_serialize::json::Json;
+
+use params::{Map, Value};
 
 pub fn validate_json(values: &Map, field: &str) -> Result<Option<Value>, String> {
     match values.find(&[field]) {
