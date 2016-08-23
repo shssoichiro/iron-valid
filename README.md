@@ -37,7 +37,7 @@ pub fn register(req: &mut Request) -> IronResult<Response> {
     match validate(rules, params) {
         Ok(ref values) => {
             // Save the user to the database
-            let email = values.find(&["required"]).unwrap();
+            let email = values.find(&["email"]).unwrap();
 
             // ...
 
