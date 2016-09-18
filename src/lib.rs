@@ -1,65 +1,33 @@
 #![cfg_attr(feature="clippy", feature(plugin))]
 #![cfg_attr(feature="clippy", plugin(clippy))]
+#![cfg_attr(feature="clippy", warn(enum_glob_use))]
+#![cfg_attr(feature="clippy", warn(if_not_else))]
+#![cfg_attr(feature="clippy", warn(string_add))]
+#![cfg_attr(feature="clippy", warn(string_add_assign))]
+#![warn(missing_debug_implementations, missing_copy_implementations)]
 
+#[cfg(feature = "diesel")]
+extern crate diesel;
 extern crate dns_lookup;
 #[macro_use]
 extern crate lazy_static;
 extern crate params;
-#[cfg(feature = "pg")]
+#[cfg(feature = "postgres")]
 extern crate postgres;
 extern crate regex;
 extern crate rustc_serialize;
 extern crate url;
 
-use params::{Map, Value};
+mod validators;
+
 use std::collections::BTreeMap;
 
-mod validators {
-    pub mod accepted;
-    pub mod active_url;
-    pub mod alpha;
-    pub mod alpha_dash;
-    pub mod alpha_numeric;
-    pub mod array;
-    pub mod between;
-    pub mod boolean;
-    pub mod confirmed;
-    pub mod different;
-    pub mod digits;
-    pub mod digits_between;
-    pub mod distinct;
-    pub mod email;
-    #[cfg(feature = "pg")]
-    pub mod exists;
-    pub mod filled;
-    pub mod in_const;
-    pub mod in_array;
-    pub mod integer;
-    pub mod ip_address;
-    pub mod json;
-    pub mod max;
-    pub mod min;
-    pub mod not_in;
-    pub mod not_in_array;
-    pub mod numeric;
-    pub mod present;
-    pub mod regex;
-    pub mod required;
-    pub mod required_if;
-    pub mod required_unless;
-    pub mod required_with;
-    pub mod required_with_all;
-    pub mod required_without;
-    pub mod required_without_all;
-    pub mod same;
-    pub mod size;
-    pub mod string;
-    #[cfg(feature = "pg")]
-    pub mod unique;
-    pub mod url;
-}
+use params::{Map, Value};
 
-#[derive(Debug,Clone)]
+#[cfg(any(feature = "postgres", feature = "diesel"))]
+use validators::database::DbConnection;
+
+#[derive(Clone)]
 pub enum Rule<'a> {
     /// The field under validation must be `yes`, `on`, `1`, or `true`.
     /// This is useful for validating "Terms of Service" acceptance.
@@ -115,14 +83,14 @@ pub enum Rule<'a> {
     Distinct,
     /// The field under validation, if present, must be formatted as an e-mail address.
     Email,
-    #[cfg(feature = "pg")]
+    #[cfg(any(feature = "postgres", feature = "diesel"))]
     /// The field under validation must exist in the given table.
     /// A column name may be specified; otherwise, the name of the field is used.
-    Exists(&'a postgres::Connection, &'static str, Option<&'static str>),
+    Exists(&'a DbConnection, &'static str, Option<&'static str>),
     /// The field under validation must not be empty when it is present.
     Filled,
     /// The field under validation, if present, must be included in the given list of values.
-    In(Vec<Value>),
+    In(&'a [Value]),
     /// The field under validation, if present, must exist in `anotherfield`'s values.
     InArray(&'static str),
     /// The field under validation, if present, must be an integer.
@@ -142,7 +110,7 @@ pub enum Rule<'a> {
     /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Min(isize),
     /// The field under validation must not be included in the given list of values.
-    NotIn(Vec<Value>),
+    NotIn(&'a [Value]),
     /// The field under validation must not exist in `anotherfield`'s values.
     NotInArray(&'static str),
     /// The field under validation, if present, must be numeric.
@@ -172,16 +140,16 @@ pub enum Rule<'a> {
     RequiredUnless(&'static str, Value),
     /// The field under validation must be present only if
     /// any of the other specified fields are present.
-    RequiredWith(Vec<&'static str>),
+    RequiredWith(&'a [&'static str]),
     /// The field under validation must be present only if
     /// all of the other specified fields are present.
-    RequiredWithAll(Vec<&'static str>),
+    RequiredWithAll(&'a [&'static str]),
     /// The field under validation must be present only when
     /// any of the other specified fields are not present.
-    RequiredWithout(Vec<&'static str>),
+    RequiredWithout(&'a [&'static str]),
     /// The field under validation must be present only when
     /// all of the other specified fields are not present.
-    RequiredWithoutAll(Vec<&'static str>),
+    RequiredWithoutAll(&'a [&'static str]),
     /// The given field must match the field under validation.
     Same(&'static str),
     /// The field under validation must have a size matching the given value.
@@ -194,18 +162,15 @@ pub enum Rule<'a> {
     Size(isize),
     /// The field under validation, if present, must be a string.
     String,
-    #[cfg(feature = "pg")]
+    #[cfg(any(feature = "postgres", feature = "diesel"))]
     /// The field under validation must not exist in the given table.
     /// A column name may be specified; otherwise, the name of the field is used.
-    Unique(&'a postgres::Connection, &'static str, Option<&'static str>),
+    Unique(&'a DbConnection, &'static str, Option<&'static str>),
     /// The field under validation, if present, must be formatted as a valid URL,
     /// but does not need to resolve to a real website. The URL must contain the scheme
     /// or else it will fail validation. For example, `http://google.com` will
     /// pass validation, but `google.com` will fail validation.
     Url,
-    #[doc(hidden)]
-    #[cfg(not(feature = "pg"))]
-    Phantom(&'a std::marker::PhantomData<u8>),
 }
 
 /// Validate a map of `values` against a map of `rules`.
@@ -249,14 +214,12 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 }
                 Rule::Distinct => validators::distinct::validate_distinct(&new_values, field),
                 Rule::Email => validators::email::validate_email(&new_values, field),
-                #[cfg(feature = "pg")]
+                #[cfg(any(feature = "postgres", feature = "diesel"))]
                 Rule::Exists(conn, table, column) => {
-                    validators::exists::validate_exists(conn, &new_values, field, table, column)
+                    conn.validate_exists(&new_values, field, table, column)
                 }
                 Rule::Filled => validators::filled::validate_filled(&new_values, field),
-                Rule::In(ref options) => {
-                    validators::in_const::validate_in(&new_values, field, options)
-                }
+                Rule::In(options) => validators::in_const::validate_in(&new_values, field, options),
                 Rule::InArray(other) => {
                     validators::in_array::validate_in_array(&new_values, field, other)
                 }
@@ -265,7 +228,7 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 Rule::Json => validators::json::validate_json(&new_values, field),
                 Rule::Max(target) => validators::max::validate_max(&new_values, field, target),
                 Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
-                Rule::NotIn(ref options) => {
+                Rule::NotIn(options) => {
                     validators::not_in::validate_not_in(&new_values, field, options)
                 }
                 Rule::NotInArray(other) => {
@@ -289,20 +252,20 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                                                                           other,
                                                                           condition)
                 }
-                Rule::RequiredWith(ref other) => {
+                Rule::RequiredWith(other) => {
                     validators::required_with::validate_required_with(&new_values, field, other)
                 }
-                Rule::RequiredWithAll(ref other) => {
+                Rule::RequiredWithAll(other) => {
                     validators::required_with_all::validate_required_with_all(&new_values,
                                                                               field,
                                                                               other)
                 }
-                Rule::RequiredWithout(ref other) => {
+                Rule::RequiredWithout(other) => {
                     validators::required_without::validate_required_without(&new_values,
                                                                             field,
                                                                             other)
                 }
-                Rule::RequiredWithoutAll(ref other) => {
+                Rule::RequiredWithoutAll(other) => {
                     validators::required_without_all::validate_required_without_all(&new_values,
                                                                                     field,
                                                                                     other)
@@ -310,13 +273,11 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 Rule::Same(other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),
-                #[cfg(feature = "pg")]
+                #[cfg(any(feature = "postgres", feature = "diesel"))]
                 Rule::Unique(conn, table, column) => {
-                    validators::unique::validate_unique(conn, &new_values, field, table, column)
+                    conn.validate_unique(&new_values, field, table, column)
                 }
                 Rule::Url => validators::url::validate_url(&new_values, field),
-                #[cfg(not(feature = "pg"))]
-                Rule::Phantom(_) => unimplemented!(),
             };
             match result {
                 Ok(Some(res)) => {
