@@ -12,18 +12,23 @@ exclude = [
   "bench/*",
 ]
 
-[features]
-default = []
-pg = ["postgres"]
-
 [dependencies]
 dns-lookup = "^0.2.0"
 lazy_static = "^0.2.1"
-params = "^0.3.0"
+params = "^0.5.0"
 postgres = { version = "^0.11.10", optional = true }
 regex = "^0.1.71"
 rustc-serialize = "^0.3.19"
 url = "^1.1.1"
 
+[dependencies.clippy]
+optional = true
+version = ">=0.0.85"
+
 [dev-dependencies]
-multipart = "^0.7.0"
+mime = "^0.2.2"
+
+[features]
+default = []
+pg = ["postgres"]
+dev = ["clippy", "pg"]

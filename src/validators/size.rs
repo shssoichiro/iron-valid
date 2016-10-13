@@ -75,7 +75,7 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
         }
         Some(&Value::File(ref value)) => {
             assert!(target >= 0);
-            if value.size() >> 10 == target as u64 {
+            if value.size >> 10 == target as u64 {
                 Ok(None)
             } else {
                 Err(format!("The {} must be {} kilobytes.",

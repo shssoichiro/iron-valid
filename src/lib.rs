@@ -1,3 +1,6 @@
+#![cfg_attr(feature="clippy", feature(plugin))]
+#![cfg_attr(feature="clippy", plugin(clippy))]
+
 extern crate dns_lookup;
 #[macro_use]
 extern crate lazy_static;
@@ -232,7 +235,7 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 }
                 Rule::Boolean => validators::boolean::validate_boolean(&new_values, field),
                 Rule::Confirmed => validators::confirmed::validate_confirmed(&new_values, field),
-                Rule::Different(ref other) => {
+                Rule::Different(other) => {
                     validators::different::validate_different(&new_values, field, other)
                 }
                 Rule::Digits(digits) => {
@@ -254,7 +257,7 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 Rule::In(ref options) => {
                     validators::in_const::validate_in(&new_values, field, options)
                 }
-                Rule::InArray(ref other) => {
+                Rule::InArray(other) => {
                     validators::in_array::validate_in_array(&new_values, field, other)
                 }
                 Rule::Integer => validators::integer::validate_integer(&new_values, field),
@@ -265,22 +268,22 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 Rule::NotIn(ref options) => {
                     validators::not_in::validate_not_in(&new_values, field, options)
                 }
-                Rule::NotInArray(ref other) => {
+                Rule::NotInArray(other) => {
                     validators::not_in_array::validate_not_in_array(&new_values, field, other)
                 }
                 Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),
                 Rule::Present => validators::present::validate_present(&new_values, field),
-                Rule::Regex(ref pattern) => {
+                Rule::Regex(pattern) => {
                     validators::regex::validate_regex(&new_values, field, pattern)
                 }
                 Rule::Required => validators::required::validate_required(&new_values, field),
-                Rule::RequiredIf(ref other, ref condition) => {
+                Rule::RequiredIf(other, ref condition) => {
                     validators::required_if::validate_required_if(&new_values,
                                                                   field,
                                                                   other,
                                                                   condition)
                 }
-                Rule::RequiredUnless(ref other, ref condition) => {
+                Rule::RequiredUnless(other, ref condition) => {
                     validators::required_unless::validate_required_unless(&new_values,
                                                                           field,
                                                                           other,
@@ -304,7 +307,7 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                                                                                     field,
                                                                                     other)
                 }
-                Rule::Same(ref other) => validators::same::validate_same(&new_values, field, other),
+                Rule::Same(other) => validators::same::validate_same(&new_values, field, other),
                 Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
                 Rule::String => validators::string::validate_string(&new_values, field),
                 #[cfg(feature = "pg")]

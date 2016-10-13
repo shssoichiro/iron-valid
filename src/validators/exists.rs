@@ -16,11 +16,13 @@ pub fn validate_exists(conn: &Connection,
                         column);
     let result = match values.find(&[field]) {
         Some(&Value::String(ref value)) => conn.query(&query, vec![value as &ToSql].as_slice()),
-        Some(&Value::U64(ref value)) => conn.query(&query, vec![&(*value as i64) as &ToSql].as_slice()),
+        Some(&Value::U64(ref value)) => {
+            conn.query(&query, vec![&(*value as i64) as &ToSql].as_slice())
+        }
         Some(&Value::I64(ref value)) => conn.query(&query, vec![value as &ToSql].as_slice()),
         Some(&Value::F64(ref value)) => conn.query(&query, vec![value as &ToSql].as_slice()),
         Some(&Value::Boolean(ref value)) => conn.query(&query, vec![value as &ToSql].as_slice()),
-        None => conn.query(&query, vec![&""  as &ToSql].as_slice()),
+        None => conn.query(&query, vec![&"" as &ToSql].as_slice()),
         _ => {
             return Err(format!("The {} field must exist in the database.",
                                field.to_lowercase().replace("_", " ")));

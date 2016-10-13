@@ -73,7 +73,7 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
         }
         Some(&Value::File(ref value)) => {
             assert!(target >= 0);
-            if value.size() >> 10 >= target as u64 {
+            if value.size >> 10 >= target as u64 {
                 Ok(None)
             } else {
                 Err(format!("The {} must be at least {} kilobytes.",

@@ -89,7 +89,7 @@ pub fn validate_between(values: &Map,
         Some(&Value::File(ref value)) => {
             assert!(min >= 0);
             assert!(max >= 0);
-            if value.size() >> 10 >= min as u64 && value.size() >> 10 <= max as u64 {
+            if value.size >> 10 >= min as u64 && value.size >> 10 <= max as u64 {
                 Ok(None)
             } else {
                 Err(format!("The {} must be between {} and {} kilobytes.",

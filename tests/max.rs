@@ -1,11 +1,13 @@
 extern crate iron_valid;
-extern crate multipart;
+extern crate mime;
 extern crate params;
 
 use iron_valid::{Rule, validate};
+use mime::Mime;
 use params::{File, Map, Value};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 #[test]
 fn test_max_valid_string() {
@@ -306,11 +308,12 @@ fn test_max_valid_low_object() {
 #[test]
 fn test_max_valid_file() {
     let mut params = Map::new();
-    let file = File::from(multipart::server::SavedFile {
+    let file = File {
         path: PathBuf::from("files/temp_size_3914b.txt"),
         filename: None,
         size: 3914,
-    });
+        content_type: Mime::from_str("text/plain").unwrap(),
+    };
     params.assign("size", Value::File(file.clone())).ok();
 
     let mut rules = BTreeMap::new();
@@ -325,11 +328,12 @@ fn test_max_valid_file() {
 #[test]
 fn test_max_invalid_high_file() {
     let mut params = Map::new();
-    let file = File::from(multipart::server::SavedFile {
+    let file = File {
         path: PathBuf::from("files/temp_size_3914b.txt"),
         filename: None,
         size: 3914,
-    });
+        content_type: Mime::from_str("text/plain").unwrap(),
+    };
     params.assign("size", Value::File(file.clone())).ok();
 
     let mut rules = BTreeMap::new();
@@ -345,11 +349,12 @@ fn test_max_invalid_high_file() {
 #[test]
 fn test_max_valid_low_file() {
     let mut params = Map::new();
-    let file = File::from(multipart::server::SavedFile {
+    let file = File {
         path: PathBuf::from("files/temp_size_3914b.txt"),
         filename: None,
         size: 3914,
-    });
+        content_type: Mime::from_str("text/plain").unwrap(),
+    };
     params.assign("size", Value::File(file.clone())).ok();
 
     let mut rules = BTreeMap::new();
