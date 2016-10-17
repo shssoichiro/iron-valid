@@ -1,4 +1,4 @@
-**Version 0.3.0 (unreleased)**
+**Version 0.3.0**
  - [SEMVER_MAJOR] Upgrade params to 0.5.x
  - [SEMVER_MAJOR] Bump minimum rustc version to 1.9.0
  - Code cleanup

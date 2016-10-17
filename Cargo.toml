@@ -1,10 +1,10 @@
 [package]
 authors = ["Joshua Holmer <jholmer.in@gmail.com>"]
 name = "iron_valid"
-version = "0.2.0"
+version = "0.3.0"
 description = "Request validation library for iron, based on Laravel's validation"
 license = "MIT"
-documentation = "http://shssoichiro.github.io/iron-valid/iron_valid/"
+documentation = "https://docs.rs/iron_valid/"
 homepage = "https://github.com/shssoichiro/iron-valid"
 repository = "https://github.com/shssoichiro/iron-valid"
 exclude = [
