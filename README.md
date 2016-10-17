@@ -52,7 +52,7 @@ This example would parse the request parameters using the params crate, then val
 
 [Full documentation, along with a list of validation rules, is available here.](http://shssoichiro.github.io/iron-valid/iron_valid/)
 
-The current minimum supported Rust version is **1.8.0**.
+The current minimum supported Rust version is **1.9.0**.
 
 iron_valid follows Semantic Versioning.
 

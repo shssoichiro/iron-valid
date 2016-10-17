@@ -122,7 +122,7 @@ pub enum Rule<'a> {
     /// The field under validation must not be empty when it is present.
     Filled,
     /// The field under validation, if present, must be included in the given list of values.
-    In(Vec<Value>),
+    In(&'a [Value]),
     /// The field under validation, if present, must exist in `anotherfield`'s values.
     InArray(&'static str),
     /// The field under validation, if present, must be an integer.
@@ -142,7 +142,7 @@ pub enum Rule<'a> {
     /// Strings, numerics, and files are evaluated in the same fashion as the `Size` rule.
     Min(isize),
     /// The field under validation must not be included in the given list of values.
-    NotIn(Vec<Value>),
+    NotIn(&'a [Value]),
     /// The field under validation must not exist in `anotherfield`'s values.
     NotInArray(&'static str),
     /// The field under validation, if present, must be numeric.
@@ -172,16 +172,16 @@ pub enum Rule<'a> {
     RequiredUnless(&'static str, Value),
     /// The field under validation must be present only if
     /// any of the other specified fields are present.
-    RequiredWith(Vec<&'static str>),
+    RequiredWith(&'a [&'static str]),
     /// The field under validation must be present only if
     /// all of the other specified fields are present.
-    RequiredWithAll(Vec<&'static str>),
+    RequiredWithAll(&'a [&'static str]),
     /// The field under validation must be present only when
     /// any of the other specified fields are not present.
-    RequiredWithout(Vec<&'static str>),
+    RequiredWithout(&'a [&'static str]),
     /// The field under validation must be present only when
     /// all of the other specified fields are not present.
-    RequiredWithoutAll(Vec<&'static str>),
+    RequiredWithoutAll(&'a [&'static str]),
     /// The given field must match the field under validation.
     Same(&'static str),
     /// The field under validation must have a size matching the given value.
@@ -203,9 +203,6 @@ pub enum Rule<'a> {
     /// or else it will fail validation. For example, `http://google.com` will
     /// pass validation, but `google.com` will fail validation.
     Url,
-    #[doc(hidden)]
-    #[cfg(not(feature = "pg"))]
-    Phantom(&'a std::marker::PhantomData<u8>),
 }
 
 /// Validate a map of `values` against a map of `rules`.
@@ -254,9 +251,7 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                     validators::exists::validate_exists(conn, &new_values, field, table, column)
                 }
                 Rule::Filled => validators::filled::validate_filled(&new_values, field),
-                Rule::In(ref options) => {
-                    validators::in_const::validate_in(&new_values, field, options)
-                }
+                Rule::In(options) => validators::in_const::validate_in(&new_values, field, options),
                 Rule::InArray(other) => {
                     validators::in_array::validate_in_array(&new_values, field, other)
                 }
@@ -265,7 +260,7 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                 Rule::Json => validators::json::validate_json(&new_values, field),
                 Rule::Max(target) => validators::max::validate_max(&new_values, field, target),
                 Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
-                Rule::NotIn(ref options) => {
+                Rule::NotIn(options) => {
                     validators::not_in::validate_not_in(&new_values, field, options)
                 }
                 Rule::NotInArray(other) => {
@@ -289,20 +284,20 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                                                                           other,
                                                                           condition)
                 }
-                Rule::RequiredWith(ref other) => {
+                Rule::RequiredWith(other) => {
                     validators::required_with::validate_required_with(&new_values, field, other)
                 }
-                Rule::RequiredWithAll(ref other) => {
+                Rule::RequiredWithAll(other) => {
                     validators::required_with_all::validate_required_with_all(&new_values,
                                                                               field,
                                                                               other)
                 }
-                Rule::RequiredWithout(ref other) => {
+                Rule::RequiredWithout(other) => {
                     validators::required_without::validate_required_without(&new_values,
                                                                             field,
                                                                             other)
                 }
-                Rule::RequiredWithoutAll(ref other) => {
+                Rule::RequiredWithoutAll(other) => {
                     validators::required_without_all::validate_required_without_all(&new_values,
                                                                                     field,
                                                                                     other)
@@ -315,8 +310,6 @@ pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
                     validators::unique::validate_unique(conn, &new_values, field, table, column)
                 }
                 Rule::Url => validators::url::validate_url(&new_values, field),
-                #[cfg(not(feature = "pg"))]
-                Rule::Phantom(_) => unimplemented!(),
             };
             match result {
                 Ok(Some(res)) => {
