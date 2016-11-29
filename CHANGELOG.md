@@ -1,3 +1,6 @@
+**Version 0.3.1**
+ - Bump compatible postgres versions to include up to 0.13.x
+
 **Version 0.3.0**
  - [SEMVER_MAJOR] Upgrade params to 0.5.x
  - [SEMVER_MAJOR] Bump minimum rustc version to 1.9.0
