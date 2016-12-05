@@ -15,7 +15,7 @@ as possible.
 
 An example of using iron_valid to validate a form request is as follows:
 
-```
+```rust
 use iron::prelude::*;
 use iron::status;
 use iron_valid::{Rule, validate};
