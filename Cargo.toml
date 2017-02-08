@@ -1,34 +1,34 @@
 [package]
 authors = ["Joshua Holmer <jholmer.in@gmail.com>"]
-name = "iron_valid"
-version = "0.3.1"
 description = "Request validation library for iron, based on Laravel's validation"
-license = "MIT"
 documentation = "https://docs.rs/iron_valid/"
+exclude = ["tests/*", "bench/*"]
 homepage = "https://github.com/shssoichiro/iron-valid"
+license = "MIT"
+name = "iron_valid"
 repository = "https://github.com/shssoichiro/iron-valid"
-exclude = [
-  "tests/*",
-  "bench/*",
-]
+version = "0.4.0"
 
 [dependencies]
 dns-lookup = "^0.2.0"
 lazy_static = "^0.2.1"
 params = "^0.6.0"
-postgres = { version = ">=0.11.10, <0.14.0", optional = true }
-regex = "^0.1.71"
-rustc-serialize = "^0.3.19"
+regex = "^0.2.0"
+serde_json = "^0.9.5"
 url = "^1.1.1"
 
 [dependencies.clippy]
 optional = true
 version = ">=0.0.85"
 
+[dependencies.postgres]
+optional = true
+version = ">=0.11.10, <0.14.0"
+
 [dev-dependencies]
 mime = "^0.2.2"
 
 [features]
 default = []
-pg = ["postgres"]
 dev = ["clippy", "pg"]
+pg = ["postgres"]

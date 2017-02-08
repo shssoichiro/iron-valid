@@ -8,7 +8,7 @@ extern crate params;
 #[cfg(feature = "pg")]
 extern crate postgres;
 extern crate regex;
-extern crate rustc_serialize;
+extern crate serde_json;
 extern crate url;
 
 use params::{Map, Value};

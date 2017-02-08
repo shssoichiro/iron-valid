@@ -1,4 +1,5 @@
-use rustc_serialize::json::Json;
+use serde_json;
+
 
 use params::{Map, Value};
 
@@ -9,7 +10,7 @@ pub fn validate_json(values: &Map, field: &str) -> Result<Option<Value>, String>
                 // Allow empty values
                 return Ok(None);
             }
-            if Json::from_str(value).is_ok() {
+            if serde_json::from_str::<serde_json::Value>(value).is_ok() {
                 return Ok(None);
             }
             Err(format!("The {} field must contain a valid JSON string.",

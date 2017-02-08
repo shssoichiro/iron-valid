@@ -1,3 +1,11 @@
+**Version 0.4.0**
+ - Bump params to 0.6.0
+ - Bump regex to 0.2.0
+ - Switch to serde_json for testing if json is valid
+ - Remove any explicit minimum supported Rust version 
+    (this should always work on the latest stable,
+    and may work on earlier versions but is not guaranteed to)
+
 **Version 0.3.1**
  - Bump compatible postgres versions to include up to 0.13.x
 
