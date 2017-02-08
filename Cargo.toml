@@ -15,7 +15,7 @@ exclude = [
 [dependencies]
 dns-lookup = "^0.2.0"
 lazy_static = "^0.2.1"
-params = "^0.5.0"
+params = "^0.6.0"
 postgres = { version = ">=0.11.10, <0.14.0", optional = true }
 regex = "^0.1.71"
 rustc-serialize = "^0.3.19"
