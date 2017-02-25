@@ -7,7 +7,7 @@ homepage = "https://github.com/shssoichiro/iron-valid"
 license = "MIT"
 name = "iron_valid"
 repository = "https://github.com/shssoichiro/iron-valid"
-version = "0.4.0"
+version = "0.4.1"
 
 [dependencies]
 dns-lookup = "^0.2.0"
@@ -23,7 +23,7 @@ version = ">=0.0.85"
 
 [dependencies.postgres]
 optional = true
-version = ">=0.11.10, <0.14.0"
+version = ">=0.11.10, <0.15.0"
 
 [dev-dependencies]
 mime = "^0.2.2"
