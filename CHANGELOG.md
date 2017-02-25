@@ -1,3 +1,6 @@
+**Version 0.4.1**
+ - Allow postgres 0.14.0 (previous versions still work with this crate)
+
 **Version 0.4.0**
  - Bump params to 0.6.0
  - Bump regex to 0.2.0
