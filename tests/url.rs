@@ -13,7 +13,7 @@ fn test_url_valid_prefixed() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["url"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_url_valid_prefixed_secure() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["url"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_url_invalid_no_prefix() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("url").unwrap(),
@@ -58,7 +58,7 @@ fn test_url_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("url").unwrap(),
@@ -73,7 +73,7 @@ fn test_url_invalid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("url").unwrap(),
@@ -88,7 +88,7 @@ fn test_url_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["url"]).unwrap(),
@@ -102,7 +102,7 @@ fn test_url_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["url"]), None);
@@ -116,9 +116,26 @@ fn test_url_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("url", vec![Rule::Url]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("url").unwrap(),
                vec!["The url field must contain a properly formatted URL.".to_owned()]);
+}
+
+#[test]
+fn test_url_valid_nested() {
+    let mut test = Map::new();
+    test.assign("url", Value::String("http://foobar.com".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.url", vec![Rule::Url]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "url"]).unwrap(),
+               &Value::String("http://foobar.com".to_owned()));
 }

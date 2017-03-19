@@ -13,7 +13,7 @@ fn test_string_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["string"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_string_valid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["string"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_string_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["string"]).unwrap(),
@@ -58,7 +58,7 @@ fn test_string_invalid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("string").unwrap(),
@@ -73,7 +73,7 @@ fn test_string_invalid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("string").unwrap(),
@@ -88,7 +88,7 @@ fn test_string_invalid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("string").unwrap(),
@@ -99,13 +99,13 @@ fn test_string_invalid_f64() {
 fn test_string_invalid_array() {
     let mut params = Map::new();
     params.assign("string",
-                Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
+                  Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("string").unwrap(),
@@ -124,7 +124,7 @@ fn test_string_invalid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("string").unwrap(),
@@ -138,7 +138,7 @@ fn test_string_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["string"]), None);
@@ -152,9 +152,26 @@ fn test_string_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("string", vec![Rule::String]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("string").unwrap(),
                vec!["The string field must be a string.".to_owned()]);
+}
+
+#[test]
+fn test_string_valid_nested() {
+    let mut test = Map::new();
+    test.assign("string", Value::String("3".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.string", vec![Rule::String]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "string"]).unwrap(),
+               &Value::String("3".to_owned()));
 }

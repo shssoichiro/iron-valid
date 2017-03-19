@@ -7,7 +7,7 @@ homepage = "https://github.com/shssoichiro/iron-valid"
 license = "MIT"
 name = "iron_valid"
 repository = "https://github.com/shssoichiro/iron-valid"
-version = "0.4.1"
+version = "0.5.0"
 
 [dependencies]
 dns-lookup = "^0.2.0"

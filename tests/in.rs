@@ -14,7 +14,7 @@ fn test_in_valid_string() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["in"]).unwrap(),
@@ -30,7 +30,7 @@ fn test_in_invalid_string() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("in").unwrap(),
@@ -46,7 +46,7 @@ fn test_in_valid_numeric() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["in"]).unwrap(), &Value::U64(2));
@@ -61,7 +61,7 @@ fn test_in_invalid_numeric() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("in").unwrap(),
@@ -77,7 +77,7 @@ fn test_in_valid_empty() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["in"]).unwrap(),
@@ -92,7 +92,7 @@ fn test_in_valid_blank() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["in"]), None);
@@ -107,9 +107,27 @@ fn test_in_invalid_null() {
     rules.insert("in",
                  vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("in").unwrap(),
                vec!["The in field must be among the options: [\"1\", 2].".to_owned()]);
+}
+
+#[test]
+fn test_in_valid_nested() {
+    let mut test = Map::new();
+    test.assign("in", Value::String("1".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.in",
+                 vec![Rule::In(vec![Value::String("1".into()), Value::U64(2)])]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "in"]).unwrap(),
+               &Value::String("1".to_owned()));
 }

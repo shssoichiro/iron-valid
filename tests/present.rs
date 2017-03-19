@@ -13,7 +13,7 @@ fn test_present_valid_boolean_true() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["present"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_present_valid_boolean_false() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["present"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_present_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["present"]).unwrap(),
@@ -58,7 +58,7 @@ fn test_present_valid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["present"]).unwrap(),
@@ -73,7 +73,7 @@ fn test_present_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["present"]).unwrap(), &Value::U64(1));
@@ -86,7 +86,7 @@ fn test_present_invalid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("present").unwrap(),
@@ -101,9 +101,26 @@ fn test_present_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("present", vec![Rule::Present]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("present").unwrap(),
                vec!["The present field must be present.".to_owned()]);
+}
+
+#[test]
+fn test_present_valid_nested() {
+    let mut test = Map::new();
+    test.assign("present", Value::Boolean(true)).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.present", vec![Rule::Present]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "present"]).unwrap(),
+               &Value::Boolean(true));
 }

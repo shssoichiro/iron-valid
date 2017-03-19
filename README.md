@@ -50,6 +50,11 @@ pub fn register(req: &mut Request) -> IronResult<Response> {
 
 This example would parse the request parameters using the params crate, then validate the `email` and `password` fields from the request using the specified rules for each.
 
+You can also validate nested fields within a request body. For example, to validate
+a struct `{ user: { name: 'foo', email: 'a@b.com' } }`, you could pass in `user.name`
+or `user.email` as the key on the `rules` passed in to `validate`. This also
+works for `Rule`s that accept a parameter for a second field.
+
 [Full documentation, along with a list of validation rules, is available here.](http://shssoichiro.github.io/iron-valid/iron_valid/)
 
 iron_valid follows Semantic Versioning.

@@ -5,16 +5,20 @@ use params::{Map, Value};
 
 pub fn validate_exists(conn: &Connection,
                        values: &Map,
-                       field: &str,
+                       field: &[&str],
                        table: &str,
                        column: Option<&str>)
                        -> Result<Option<Value>, String> {
-    let column = if let Some(c) = column { c } else { field };
+    let column = if let Some(c) = column {
+        c
+    } else {
+        field.last().unwrap()
+    };
     let query = format!("SELECT COUNT({}) as c FROM {} WHERE {} = $1",
                         column,
                         table,
                         column);
-    let result = match values.find(&[field]) {
+    let result = match values.find(field) {
         Some(&Value::String(ref value)) => conn.query(&query, vec![value as &ToSql].as_slice()),
         Some(&Value::U64(ref value)) => {
             conn.query(&query, vec![&(*value as i64) as &ToSql].as_slice())
@@ -25,7 +29,10 @@ pub fn validate_exists(conn: &Connection,
         None => conn.query(&query, vec![&"" as &ToSql].as_slice()),
         _ => {
             return Err(format!("The {} field must exist in the database.",
-                               field.to_lowercase().replace("_", " ")));
+                               field.last()
+                                   .unwrap()
+                                   .to_lowercase()
+                                   .replace("_", " ")));
         }
     };
 
@@ -34,6 +41,9 @@ pub fn validate_exists(conn: &Connection,
         Ok(None)
     } else {
         Err(format!("The {} field must exist in the database.",
-                    field.to_lowercase().replace("_", " ")))
+                    field.last()
+                        .unwrap()
+                        .to_lowercase()
+                        .replace("_", " ")))
     }
 }

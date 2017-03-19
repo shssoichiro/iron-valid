@@ -1,13 +1,13 @@
 use params::{Map, Value};
 
 pub fn validate_between(values: &Map,
-                        field: &str,
+                        field: &[&str],
                         min: isize,
                         max: isize)
                         -> Result<Option<Value>, String> {
     assert!(max >= min);
 
-    match values.find(&[field]) {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -19,7 +19,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be between {} and {} characters.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -29,7 +32,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be between {} and {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -39,7 +45,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be between {} and {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -49,7 +58,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be between {} and {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -65,7 +77,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must have between {} and {} items.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -81,7 +96,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must have between {} and {} items.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -93,7 +111,10 @@ pub fn validate_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} must be between {} and {} kilobytes.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -104,7 +125,10 @@ pub fn validate_between(values: &Map,
         }
         _ => {
             Err(format!("The {} field must have a size between {} and {}.",
-                        field.to_lowercase().replace("_", " "),
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " "),
                         min,
                         max))
         }

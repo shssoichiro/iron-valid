@@ -9,13 +9,13 @@ use std::collections::BTreeMap;
 fn test_distinct_valid_array() {
     let mut params = Map::new();
     params.assign("distinct",
-                Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
+                  Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["distinct"]).unwrap(),
@@ -26,13 +26,13 @@ fn test_distinct_valid_array() {
 fn test_distinct_invalid_array() {
     let mut params = Map::new();
     params.assign("distinct",
-                Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(1)]))
+                  Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(1)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("distinct").unwrap(),
@@ -47,7 +47,7 @@ fn test_distinct_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["distinct"]).unwrap(),
@@ -62,7 +62,7 @@ fn test_distinct_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["distinct"]).unwrap(),
@@ -77,7 +77,7 @@ fn test_distinct_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["distinct"]).unwrap(),
@@ -91,7 +91,7 @@ fn test_distinct_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["distinct"]), None);
@@ -105,8 +105,27 @@ fn test_distinct_valid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("distinct", vec![Rule::Distinct]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["distinct"]).unwrap(), &Value::Null);
+}
+
+#[test]
+fn test_distinct_valid_nested() {
+    let mut test = Map::new();
+    test.assign("distinct",
+                Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
+        .ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.distinct", vec![Rule::Distinct]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "distinct"]).unwrap(),
+               &Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]));
 }

@@ -13,7 +13,7 @@ fn test_alpha_dash_valid_lowercase() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_alpha_dash_valid_uppercase() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -44,7 +44,7 @@ fn test_alpha_dash_valid_mixed_case() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -59,7 +59,7 @@ fn test_alpha_dash_valid_numeric_string() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -74,7 +74,7 @@ fn test_alpha_dash_invalid_whitespace() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("alpha_dash").unwrap(),
@@ -90,7 +90,7 @@ fn test_alpha_dash_valid_underscore() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -105,7 +105,7 @@ fn test_alpha_dash_valid_dash() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -120,7 +120,7 @@ fn test_alpha_dash_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -135,7 +135,7 @@ fn test_alpha_dash_valid_negative() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -150,7 +150,7 @@ fn test_alpha_dash_invalid_float() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("alpha_dash").unwrap(),
@@ -166,7 +166,7 @@ fn test_alpha_dash_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]).unwrap(),
@@ -180,7 +180,7 @@ fn test_alpha_dash_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["alpha_dash"]), None);
@@ -194,10 +194,27 @@ fn test_alpha_dash_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("alpha_dash", vec![Rule::AlphaDash]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("alpha_dash").unwrap(),
                vec!["The alpha dash field may only contain alphanumeric characters, dashes, and underscores."
                         .to_owned()]);
+}
+
+#[test]
+fn test_alpha_dash_valid_nested() {
+    let mut test = Map::new();
+    test.assign("alpha_dash", Value::String("foobarbaz".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.alpha_dash", vec![Rule::AlphaDash]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "alpha_dash"]).unwrap(),
+               &Value::String("foobarbaz".to_owned()));
 }

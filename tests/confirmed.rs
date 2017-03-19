@@ -14,7 +14,7 @@ fn test_confirmed_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -30,7 +30,7 @@ fn test_confirmed_valid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -46,7 +46,7 @@ fn test_confirmed_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -62,7 +62,7 @@ fn test_confirmed_valid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -78,7 +78,7 @@ fn test_confirmed_invalid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -94,7 +94,7 @@ fn test_confirmed_valid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -110,7 +110,7 @@ fn test_confirmed_invalid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -126,7 +126,7 @@ fn test_confirmed_valid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -142,7 +142,7 @@ fn test_confirmed_invalid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -154,13 +154,13 @@ fn test_confirmed_valid_array() {
     let mut params = Map::new();
     params.assign("confirmed", Value::Array(vec![Value::F64(42.0)])).ok();
     params.assign("confirmed_confirmation",
-                Value::Array(vec![Value::F64(42.0)]))
+                  Value::Array(vec![Value::F64(42.0)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -176,7 +176,7 @@ fn test_confirmed_valid_empty_array() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -188,13 +188,13 @@ fn test_confirmed_invalid_array() {
     let mut params = Map::new();
     params.assign("confirmed", Value::Array(vec![Value::F64(42.0)])).ok();
     params.assign("confirmed_confirmation",
-                Value::Array(vec![Value::F64(41.0)]))
+                  Value::Array(vec![Value::F64(41.0)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -212,7 +212,7 @@ fn test_confirmed_valid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -229,7 +229,7 @@ fn test_confirmed_valid_empty_object() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -248,7 +248,7 @@ fn test_confirmed_invalid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -264,7 +264,7 @@ fn test_confirmed_valid_boolean() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]).unwrap(),
@@ -280,7 +280,7 @@ fn test_confirmed_invalid_boolean() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
@@ -294,7 +294,7 @@ fn test_confirmed_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["confirmed"]), None);
@@ -308,9 +308,27 @@ fn test_confirmed_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("confirmed", vec![Rule::Confirmed]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("confirmed").unwrap(),
                vec!["The confirmed field must match the confirmed confirmation.".to_owned()]);
+}
+
+#[test]
+fn test_confirmed_valid_nested() {
+    let mut test = Map::new();
+    test.assign("confirmed", Value::String("foo".to_owned())).ok();
+    test.assign("confirmed_confirmation", Value::String("foo".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.confirmed", vec![Rule::Confirmed]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "confirmed"]).unwrap(),
+               &Value::String("foo".to_owned()));
 }

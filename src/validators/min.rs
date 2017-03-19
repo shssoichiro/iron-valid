@@ -1,7 +1,7 @@
 use params::{Map, Value};
 
-pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_min(values: &Map, field: &[&str], target: isize) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -12,7 +12,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} field must be at least {} characters.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -21,7 +24,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} field must be at least {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -30,7 +36,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} field must be at least {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -39,7 +48,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} field must be at least {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -53,7 +65,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} field must have at least {} items.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -67,7 +82,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} field must have at least {} items.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -77,7 +95,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
                 Ok(None)
             } else {
                 Err(format!("The {} must be at least {} kilobytes.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -87,7 +108,10 @@ pub fn validate_min(values: &Map, field: &str, target: isize) -> Result<Option<V
         }
         _ => {
             Err(format!("The {} field must have at least a size of {}.",
-                        field.to_lowercase().replace("_", " "),
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " "),
                         target))
         }
     }

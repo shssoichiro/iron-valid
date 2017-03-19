@@ -14,7 +14,7 @@ fn test_required_without_valid() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::RequiredWithout(vec!["other"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -31,7 +31,7 @@ fn test_required_without_valid_one_of_two() {
     rules.insert("required",
                  vec![Rule::RequiredWithout(vec!["other", "another"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -49,7 +49,7 @@ fn test_required_without_valid_two_of_two() {
     rules.insert("required",
                  vec![Rule::RequiredWithout(vec!["other", "another"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -66,7 +66,7 @@ fn test_required_without_invalid_one_of_two_blank() {
     rules.insert("required",
                  vec![Rule::RequiredWithout(vec!["other", "another"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -84,7 +84,7 @@ fn test_required_without_valid_two_of_two_blank() {
     rules.insert("required",
                  vec![Rule::RequiredWithout(vec!["other", "another"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -100,7 +100,7 @@ fn test_required_without_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::RequiredWithout(vec!["other"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -115,7 +115,7 @@ fn test_required_without_invalid_other_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::RequiredWithout(vec!["other"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -130,7 +130,7 @@ fn test_required_without_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::RequiredWithout(vec!["other"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]), None);
@@ -144,9 +144,28 @@ fn test_required_without_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::RequiredWithout(vec!["other"])]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
                vec!["The required field is required.".to_owned()]);
+}
+
+#[test]
+fn test_required_without_valid_nested() {
+    let mut test = Map::new();
+    test.assign("required", Value::String("true".to_owned())).ok();
+    test.assign("other", Value::Boolean(true)).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.required",
+                 vec![Rule::RequiredWithout(vec!["test.other"])]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "required"]).unwrap(),
+               &Value::String("true".to_owned()));
 }
