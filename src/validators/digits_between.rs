@@ -1,11 +1,11 @@
 use params::{Map, Value};
 
 pub fn validate_digits_between(values: &Map,
-                               field: &str,
+                               field: &[&str],
                                min: usize,
                                max: usize)
                                -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -19,7 +19,10 @@ pub fn validate_digits_between(values: &Map,
                         Ok(Some(Value::U64(uvalue)))
                     } else {
                         Err(format!("The {} field must be a number with between {} and {} digits.",
-                                    field.to_lowercase().replace("_", " "),
+                                    field.last()
+                                        .unwrap()
+                                        .to_lowercase()
+                                        .replace("_", " "),
                                     min,
                                     max))
                     }
@@ -33,7 +36,10 @@ pub fn validate_digits_between(values: &Map,
                                 Ok(Some(Value::I64(ivalue)))
                             } else {
                                 Err(format!("The {} field must be a number with between {} and {} digits.",
-                                            field.to_lowercase().replace("_", " "),
+                                            field.last()
+                                                .unwrap()
+                                                .to_lowercase()
+                                                .replace("_", " "),
                                             min,
                                             max))
                             }
@@ -48,14 +54,20 @@ pub fn validate_digits_between(values: &Map,
                                         Ok(Some(Value::F64(fvalue)))
                                     } else {
                                         Err(format!("The {} field must be a number with between {} and {} digits.",
-                                                    field.to_lowercase().replace("_", " "),
+                                                    field.last()
+                                                        .unwrap()
+                                                        .to_lowercase()
+                                                        .replace("_", " "),
                                                     min,
                                                     max))
                                     }
                                 }
                                 Err(_) => {
                                     Err(format!("The {} field must be a number with between {} and {} digits.",
-                                                field.to_lowercase().replace("_", " "),
+                                                field.last()
+                                                    .unwrap()
+                                                    .to_lowercase()
+                                                    .replace("_", " "),
                                                 min,
                                                 max))
                                 }
@@ -76,7 +88,10 @@ pub fn validate_digits_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be a number with between {} and {} digits.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -92,7 +107,10 @@ pub fn validate_digits_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be a number with between {} and {} digits.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -108,7 +126,10 @@ pub fn validate_digits_between(values: &Map,
                 Ok(None)
             } else {
                 Err(format!("The {} field must be a number with between {} and {} digits.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             min,
                             max))
             }
@@ -119,7 +140,10 @@ pub fn validate_digits_between(values: &Map,
         }
         _ => {
             Err(format!("The {} field must be a number with between {} and {} digits.",
-                        field.to_lowercase().replace("_", " "),
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " "),
                         min,
                         max))
         }

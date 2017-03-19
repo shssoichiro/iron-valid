@@ -17,7 +17,7 @@ fn test_min_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(3)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -32,7 +32,7 @@ fn test_min_valid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(2)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -47,7 +47,7 @@ fn test_min_valid_high_string() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(2)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -62,7 +62,7 @@ fn test_min_invalid_low_string() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(5)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
@@ -77,7 +77,7 @@ fn test_min_valid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(3)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::U64(3));
@@ -91,7 +91,7 @@ fn test_min_valid_high_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(5)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::U64(10));
@@ -105,7 +105,7 @@ fn test_min_invalid_low_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(5)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
@@ -120,7 +120,7 @@ fn test_min_valid_u64_below_0() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(-5)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::U64(1));
@@ -134,7 +134,7 @@ fn test_min_valid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(3)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::I64(3));
@@ -148,7 +148,7 @@ fn test_min_valid_high_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(1)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::I64(10));
@@ -162,7 +162,7 @@ fn test_min_invalid_low_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(4)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
@@ -177,7 +177,7 @@ fn test_min_valid_array() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(2)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -192,7 +192,7 @@ fn test_min_valid_empty_array() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(4)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -203,13 +203,13 @@ fn test_min_valid_empty_array() {
 fn test_min_valid_high_array() {
     let mut params = Map::new();
     params.assign("size",
-                Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
+                  Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(2)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -220,13 +220,13 @@ fn test_min_valid_high_array() {
 fn test_min_invalid_low_array() {
     let mut params = Map::new();
     params.assign("size",
-                Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
+                  Value::Array(vec![Value::U64(1), Value::U64(2), Value::U64(3)]))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(8)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
@@ -246,7 +246,7 @@ fn test_min_valid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(4)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::Map(items));
@@ -260,7 +260,7 @@ fn test_min_valid_empty_object() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(4)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(),
@@ -279,7 +279,7 @@ fn test_min_valid_high_object() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(2)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::Map(items));
@@ -297,7 +297,7 @@ fn test_min_invalid_low_object() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(8)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
@@ -318,7 +318,7 @@ fn test_min_valid_file() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(3)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::File(file));
@@ -338,7 +338,7 @@ fn test_min_valid_high_file() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(2)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]).unwrap(), &Value::File(file));
@@ -358,7 +358,7 @@ fn test_min_invalid_low_file() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(8)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
@@ -372,7 +372,7 @@ fn test_min_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(4)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["size"]), None);
@@ -386,9 +386,26 @@ fn test_min_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("size", vec![Rule::Min(4)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("size").unwrap(),
                vec!["The size field must have at least a size of 4.".to_owned()]);
+}
+
+#[test]
+fn test_min_valid_nested() {
+    let mut test = Map::new();
+    test.assign("size", Value::String("foo".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.size", vec![Rule::Min(3)]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "size"]).unwrap(),
+               &Value::String("foo".to_owned()));
 }

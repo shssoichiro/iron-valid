@@ -1,7 +1,10 @@
 use params::{Map, Value};
 
-pub fn validate_in(values: &Map, field: &str, options: &[Value]) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_in(values: &Map,
+                   field: &[&str],
+                   options: &[Value])
+                   -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) if value.is_empty() => Ok(None),
         Some(&Value::Array(ref value)) if value.is_empty() => Ok(None),
         Some(&Value::Map(ref value)) if value.is_empty() => Ok(None),
@@ -10,7 +13,10 @@ pub fn validate_in(values: &Map, field: &str, options: &[Value]) -> Result<Optio
                 Ok(None)
             } else {
                 Err(format!("The {} field must be among the options: {:?}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             options))
             }
         }

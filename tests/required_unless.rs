@@ -15,7 +15,7 @@ fn test_required_unless_valid() {
     rules.insert("required",
                  vec![Rule::RequiredUnless("other", Value::Boolean(true))]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -32,7 +32,7 @@ fn test_required_unless_invalid() {
     rules.insert("required",
                  vec![Rule::RequiredUnless("other", Value::Boolean(true))]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -49,7 +49,7 @@ fn test_required_unless_valid_not_match() {
     rules.insert("required",
                  vec![Rule::RequiredUnless("other", Value::Boolean(true))]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -65,7 +65,7 @@ fn test_required_unless_invalid_other_blank() {
     rules.insert("required",
                  vec![Rule::RequiredUnless("other", Value::Boolean(true))]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -81,7 +81,7 @@ fn test_required_unless_invalid_blank() {
     rules.insert("required",
                  vec![Rule::RequiredUnless("other", Value::Boolean(true))]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -98,9 +98,28 @@ fn test_required_unless_invalid_null() {
     rules.insert("required",
                  vec![Rule::RequiredUnless("other", Value::Boolean(true))]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
                vec!["The required field is required.".to_owned()]);
+}
+
+#[test]
+fn test_required_unless_valid_nested() {
+    let mut test = Map::new();
+    test.assign("required", Value::String("true".to_owned())).ok();
+    test.assign("other", Value::Boolean(false)).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.required",
+                 vec![Rule::RequiredUnless("test.other", Value::Boolean(true))]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "required"]).unwrap(),
+               &Value::String("true".to_owned()));
 }

@@ -13,7 +13,7 @@ fn test_email_valid() {
     let mut rules = BTreeMap::new();
     rules.insert("email", vec![Rule::Email]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["email"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_email_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("email", vec![Rule::Email]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("email").unwrap(),
@@ -43,7 +43,7 @@ fn test_email_invalid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("email", vec![Rule::Email]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("email").unwrap(),
@@ -58,7 +58,7 @@ fn test_email_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("email", vec![Rule::Email]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["email"]).unwrap(),
@@ -72,7 +72,7 @@ fn test_email_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("email", vec![Rule::Email]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["email"]), None);
@@ -86,9 +86,26 @@ fn test_email_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("email", vec![Rule::Email]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("email").unwrap(),
                vec!["The email field must contain a valid email address.".to_owned()]);
+}
+
+#[test]
+fn test_email_nested() {
+    let mut test = Map::new();
+    test.assign("email", Value::String("foo@bar.com".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.email", vec![Rule::Email]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "email"]).unwrap(),
+               &Value::String("foo@bar.com".to_owned()));
 }

@@ -13,7 +13,7 @@ fn test_regex_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["regex"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_regex_invalid_string_negative() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
@@ -43,7 +43,7 @@ fn test_regex_invalid_string_float() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
@@ -58,7 +58,7 @@ fn test_regex_invalid_string_non_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
@@ -73,7 +73,7 @@ fn test_regex_invalid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
@@ -88,7 +88,7 @@ fn test_regex_valid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["regex"]).unwrap(),
@@ -103,7 +103,7 @@ fn test_regex_invalid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
@@ -118,7 +118,7 @@ fn test_regex_invalid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
@@ -132,7 +132,7 @@ fn test_regex_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["regex"]), None);
@@ -146,9 +146,26 @@ fn test_regex_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("regex", vec![Rule::Regex(r"^\d+$")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("regex").unwrap(),
                vec!["The regex field must match the pattern \"^\\d+$\".".to_owned()]);
+}
+
+#[test]
+fn test_regex_valid_nested() {
+    let mut test = Map::new();
+    test.assign("regex", Value::String("12345".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.regex", vec![Rule::Regex(r"^\d+$")]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "regex"]).unwrap(),
+               &Value::String("12345".to_owned()));
 }

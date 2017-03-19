@@ -13,7 +13,7 @@ fn test_ip_address_valid() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["ip"]).unwrap(),
@@ -24,13 +24,13 @@ fn test_ip_address_valid() {
 fn test_ip_address_valid_v6() {
     let mut params = Map::new();
     params.assign("ip",
-                Value::String("2001:0db8:0000:0042:0000:8a2e:0370:7334".to_owned()))
+                  Value::String("2001:0db8:0000:0042:0000:8a2e:0370:7334".to_owned()))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["ip"]).unwrap(),
@@ -45,7 +45,7 @@ fn test_ip_address_invalid_out_of_range() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("ip").unwrap(),
@@ -60,7 +60,7 @@ fn test_ip_address_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("ip").unwrap(),
@@ -75,7 +75,7 @@ fn test_ip_address_invalid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("ip").unwrap(),
@@ -90,7 +90,7 @@ fn test_ip_address_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["ip"]).unwrap(),
@@ -104,7 +104,7 @@ fn test_ip_address_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["ip"]), None);
@@ -118,9 +118,26 @@ fn test_ip_address_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("ip", vec![Rule::IpAddress]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("ip").unwrap(),
                vec!["The ip field must contain a valid IP address.".to_owned()]);
+}
+
+#[test]
+fn test_ip_address_valid_nested() {
+    let mut test = Map::new();
+    test.assign("ip", Value::String("192.168.1.1".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.ip", vec![Rule::IpAddress]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "ip"]).unwrap(),
+               &Value::String("192.168.1.1".to_owned()));
 }

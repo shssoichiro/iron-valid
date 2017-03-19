@@ -1,7 +1,7 @@
 use params::{Map, Value};
 
-pub fn validate_numeric(values: &Map, field: &str) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_numeric(values: &Map, field: &[&str]) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -20,7 +20,10 @@ pub fn validate_numeric(values: &Map, field: &str) -> Result<Option<Value>, Stri
                                 Ok(fvalue) => Ok(Some(Value::F64(fvalue))),
                                 Err(_) => {
                                     Err(format!("The {} field must be numeric.",
-                                                field.to_lowercase().replace("_", " ")))
+                                                field.last()
+                                                    .unwrap()
+                                                    .to_lowercase()
+                                                    .replace("_", " ")))
                                 }
                             }
                         }
@@ -37,7 +40,10 @@ pub fn validate_numeric(values: &Map, field: &str) -> Result<Option<Value>, Stri
         }
         _ => {
             Err(format!("The {} field must be numeric.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
     }
 }

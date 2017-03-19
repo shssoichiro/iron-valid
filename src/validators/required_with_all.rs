@@ -1,12 +1,12 @@
 use params::{Map, Value};
 
 pub fn validate_required_with_all(values: &Map,
-                                  field: &str,
-                                  others: &[&str])
+                                  field: &[&str],
+                                  others: &[Vec<&str>])
                                   -> Result<Option<Value>, String> {
     let mut required = true;
     for other in others {
-        let current = match values.find(&[other]) {
+        let current = match values.find(other) {
             None |
             Some(&Value::Null) => false,
             Some(&Value::String(ref value)) if value.is_empty() => false,
@@ -21,23 +21,35 @@ pub fn validate_required_with_all(values: &Map,
     }
 
     if required {
-        match values.find(&[field]) {
+        match values.find(field) {
             Some(&Value::String(ref value)) if value.is_empty() => {
                 Err(format!("The {} field is required.",
-                            field.to_lowercase().replace("_", " ")))
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " ")))
             }
             Some(&Value::Array(ref value)) if value.is_empty() => {
                 Err(format!("The {} field is required.",
-                            field.to_lowercase().replace("_", " ")))
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " ")))
             }
             Some(&Value::Map(ref value)) if value.is_empty() => {
                 Err(format!("The {} field is required.",
-                            field.to_lowercase().replace("_", " ")))
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " ")))
             }
             Some(&Value::Null) |
             None => {
                 Err(format!("The {} field is required.",
-                            field.to_lowercase().replace("_", " ")))
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " ")))
             }
             _ => Ok(None),
         }

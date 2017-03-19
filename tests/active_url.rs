@@ -13,7 +13,7 @@ fn test_active_url_valid() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["active_url"]).unwrap(),
@@ -24,13 +24,13 @@ fn test_active_url_valid() {
 fn test_active_url_invalid_domain() {
     let mut params = Map::new();
     params.assign("active_url",
-                Value::String("vn4vau9n42n92f342j3298juinnu.com".to_owned()))
+                  Value::String("vn4vau9n42n92f342j3298juinnu.com".to_owned()))
         .ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("active_url").unwrap(),
@@ -45,7 +45,7 @@ fn test_active_url_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("active_url").unwrap(),
@@ -60,7 +60,7 @@ fn test_active_url_invalid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("active_url").unwrap(),
@@ -75,7 +75,7 @@ fn test_active_url_invalid_float() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("active_url").unwrap(),
@@ -90,7 +90,7 @@ fn test_active_url_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["active_url"]).unwrap(),
@@ -104,7 +104,7 @@ fn test_active_url_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["active_url"]), None);
@@ -118,9 +118,26 @@ fn test_active_url_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("active_url", vec![Rule::ActiveUrl]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("active_url").unwrap(),
                vec!["The active url field must contain a valid, active domain name.".to_owned()]);
+}
+
+#[test]
+fn test_active_url_nested_valid() {
+    let mut test = Map::new();
+    test.assign("active_url", Value::String("google.com".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.active_url", vec![Rule::ActiveUrl]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "active_url"]).unwrap(),
+               &Value::String("google.com".to_owned()));
 }

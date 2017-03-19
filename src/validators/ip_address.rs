@@ -3,8 +3,8 @@ use std::str::FromStr;
 
 use params::{Map, Value};
 
-pub fn validate_ip_address(values: &Map, field: &str) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_ip_address(values: &Map, field: &[&str]) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -14,7 +14,10 @@ pub fn validate_ip_address(values: &Map, field: &str) -> Result<Option<Value>, S
                 return Ok(None);
             }
             Err(format!("The {} field must contain a valid IP address.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
         None => {
             // Allow empty values
@@ -22,7 +25,10 @@ pub fn validate_ip_address(values: &Map, field: &str) -> Result<Option<Value>, S
         }
         _ => {
             Err(format!("The {} field must contain a valid IP address.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
     }
 }

@@ -1,7 +1,7 @@
 use params::{Map, Value};
 
-pub fn validate_boolean(values: &Map, field: &str) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_boolean(values: &Map, field: &[&str]) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::Boolean(_)) => Ok(None),
         Some(&Value::String(ref value)) => {
             let value = value.to_lowercase();
@@ -12,7 +12,10 @@ pub fn validate_boolean(values: &Map, field: &str) -> Result<Option<Value>, Stri
                 return Ok(Some(Value::Boolean(false)));
             }
             Err(format!("The {} field must be a boolean.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
         Some(&Value::U64(ref value)) => {
             if *value == 1 {
@@ -22,7 +25,10 @@ pub fn validate_boolean(values: &Map, field: &str) -> Result<Option<Value>, Stri
                 return Ok(Some(Value::Boolean(false)));
             }
             Err(format!("The {} field must be a boolean.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
         Some(&Value::I64(ref value)) => {
             if *value == 1 {
@@ -32,7 +38,10 @@ pub fn validate_boolean(values: &Map, field: &str) -> Result<Option<Value>, Stri
                 return Ok(Some(Value::Boolean(false)));
             }
             Err(format!("The {} field must be a boolean.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
         None => {
             // Allow empty values
@@ -40,7 +49,10 @@ pub fn validate_boolean(values: &Map, field: &str) -> Result<Option<Value>, Stri
         }
         _ => {
             Err(format!("The {} field must be a boolean.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
     }
 }

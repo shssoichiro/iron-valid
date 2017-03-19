@@ -1,7 +1,7 @@
 use params::{Map, Value};
 
-pub fn validate_alpha(values: &Map, field: &str) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_alpha(values: &Map, field: &[&str]) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -11,7 +11,10 @@ pub fn validate_alpha(values: &Map, field: &str) -> Result<Option<Value>, String
                 return Ok(None);
             }
             Err(format!("The {} field may only contain alphabetic characters.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
         None => {
             // Allow empty values
@@ -19,7 +22,10 @@ pub fn validate_alpha(values: &Map, field: &str) -> Result<Option<Value>, String
         }
         _ => {
             Err(format!("The {} field may only contain alphabetic characters.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
     }
 }

@@ -2,8 +2,8 @@ use std::f64;
 
 use params::{Map, Value};
 
-pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_size(values: &Map, field: &[&str], target: isize) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -14,7 +14,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} field must be {} characters.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -23,7 +26,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} field must be {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -32,7 +38,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} field must be {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -41,7 +50,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} field must be {}.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -55,7 +67,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} field must have {} items.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -69,7 +84,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} field must have {} items.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -79,7 +97,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
                 Ok(None)
             } else {
                 Err(format!("The {} must be {} kilobytes.",
-                            field.to_lowercase().replace("_", " "),
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " "),
                             target))
             }
         }
@@ -89,7 +110,10 @@ pub fn validate_size(values: &Map, field: &str, target: isize) -> Result<Option<
         }
         _ => {
             Err(format!("The {} field must have a size of {}.",
-                        field.to_lowercase().replace("_", " "),
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " "),
                         target))
         }
     }

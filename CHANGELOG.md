@@ -1,3 +1,10 @@
+**Version 0.5.0**
+ - [SEMVER_MAJOR] `validate` now takes `rules` by reference
+ - [SEMVER_MINOR] Nested fields can be validated. For example, to validate
+ a struct `{ user: { name: 'foo', email: 'a@b.com' } }`, you could pass in `user.name`
+ or `user.email` as the key on the `rules` passed in to `validate`. This also
+ works for `Rule`s that accept a parameter for a second field. ([#34](https://github.com/shssoichiro/iron-valid/issues/34))
+
 **Version 0.4.1**
  - Allow postgres 0.14.0 (previous versions still work with this crate)
 

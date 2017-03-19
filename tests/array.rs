@@ -13,7 +13,7 @@ fn test_array_valid_array() {
     let mut rules = BTreeMap::new();
     rules.insert("array", vec![Rule::Array]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["array"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_array_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("array", vec![Rule::Array]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("array").unwrap(),
@@ -43,7 +43,7 @@ fn test_array_invalid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("array", vec![Rule::Array]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("array").unwrap(),
@@ -58,7 +58,7 @@ fn test_array_valid_empty() {
     let mut rules = BTreeMap::new();
     rules.insert("array", vec![Rule::Array]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["array"]).unwrap(),
@@ -72,7 +72,7 @@ fn test_array_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("array", vec![Rule::Array]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["array"]), None);
@@ -86,9 +86,26 @@ fn test_array_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("array", vec![Rule::Array]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("array").unwrap(),
                vec!["The array field must be an array.".to_owned()]);
+}
+
+#[test]
+fn test_array_valid_nested() {
+    let mut test = Map::new();
+    test.assign("array", Value::Array(vec![Value::U64(1)])).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.array", vec![Rule::Array]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "array"]).unwrap(),
+               &Value::Array(vec![Value::U64(1)]));
 }

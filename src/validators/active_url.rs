@@ -2,8 +2,8 @@ use dns_lookup;
 
 use params::{Map, Value};
 
-pub fn validate_active_url(values: &Map, field: &str) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_active_url(values: &Map, field: &[&str]) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -13,7 +13,10 @@ pub fn validate_active_url(values: &Map, field: &str) -> Result<Option<Value>, S
                 Ok(None)
             } else {
                 Err(format!("The {} field must contain a valid, active domain name.",
-                            field.to_lowercase().replace("_", " ")))
+                            field.last()
+                                .unwrap()
+                                .to_lowercase()
+                                .replace("_", " ")))
             }
         }
         None => {
@@ -22,7 +25,10 @@ pub fn validate_active_url(values: &Map, field: &str) -> Result<Option<Value>, S
         }
         _ => {
             Err(format!("The {} field must contain a valid, active domain name.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
     }
 }

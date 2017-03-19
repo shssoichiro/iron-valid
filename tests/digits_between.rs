@@ -13,7 +13,7 @@ fn test_digits_between_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_digits_between_valid_string_negative() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_digits_between_valid_string_float() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -58,7 +58,7 @@ fn test_digits_between_invalid_string_digits() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -73,7 +73,7 @@ fn test_digits_between_invalid_string_non_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -88,7 +88,7 @@ fn test_digits_between_valid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -103,7 +103,7 @@ fn test_digits_between_valid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -118,7 +118,7 @@ fn test_digits_between_invalid_high_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -133,7 +133,7 @@ fn test_digits_between_invalid_low_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -148,7 +148,7 @@ fn test_digits_between_valid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -163,7 +163,7 @@ fn test_digits_between_invalid_high_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -178,7 +178,7 @@ fn test_digits_between_invalid_low_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -193,7 +193,7 @@ fn test_digits_between_valid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]).unwrap(),
@@ -208,7 +208,7 @@ fn test_digits_between_invalid_high_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -223,7 +223,7 @@ fn test_digits_between_invalid_low_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
@@ -237,7 +237,7 @@ fn test_digits_between_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["digits"]), None);
@@ -251,9 +251,26 @@ fn test_digits_between_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("digits", vec![Rule::DigitsBetween(4, 6)]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("digits").unwrap(),
                vec!["The digits field must be a number with between 4 and 6 digits.".to_owned()]);
+}
+
+#[test]
+fn test_digits_between_valid_nested() {
+    let mut test = Map::new();
+    test.assign("digits", Value::String("12345".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.digits", vec![Rule::DigitsBetween(4, 6)]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "digits"]).unwrap(),
+               &Value::U64(12345));
 }

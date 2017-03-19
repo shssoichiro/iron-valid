@@ -212,115 +212,177 @@ pub enum Rule<'a> {
 ///
 /// Returns a `Result` containing a map of post-processed `values`,
 /// or a map of validation error messages.
-pub fn validate(rules: BTreeMap<&'static str, Vec<Rule>>,
+pub fn validate(rules: &BTreeMap<&'static str, Vec<Rule>>,
                 values: Map)
                 -> Result<Map, BTreeMap<&'static str, Vec<String>>> {
     let mut new_values = values;
     let mut errors = BTreeMap::new();
 
-    for (field, ruleset) in &rules {
+    for (field, ruleset) in rules {
+        let array_field = field.split('.').collect::<Vec<&str>>();
         let mut current_errors = Vec::new();
         for rule in ruleset {
             let result = match *rule {
-                Rule::Accepted => validators::accepted::validate_accepted(&new_values, field),
-                Rule::ActiveUrl => validators::active_url::validate_active_url(&new_values, field),
-                Rule::Alpha => validators::alpha::validate_alpha(&new_values, field),
-                Rule::AlphaDash => validators::alpha_dash::validate_alpha_dash(&new_values, field),
+                Rule::Accepted => {
+                    validators::accepted::validate_accepted(&new_values, &array_field)
+                }
+                Rule::ActiveUrl => {
+                    validators::active_url::validate_active_url(&new_values, &array_field)
+                }
+                Rule::Alpha => validators::alpha::validate_alpha(&new_values, &array_field),
+                Rule::AlphaDash => {
+                    validators::alpha_dash::validate_alpha_dash(&new_values, &array_field)
+                }
                 Rule::AlphaNumeric => {
-                    validators::alpha_numeric::validate_alpha_numeric(&new_values, field)
+                    validators::alpha_numeric::validate_alpha_numeric(&new_values, &array_field)
                 }
-                Rule::Array => validators::array::validate_array(&new_values, field),
+                Rule::Array => validators::array::validate_array(&new_values, &array_field),
                 Rule::Between(min, max) => {
-                    validators::between::validate_between(&new_values, field, min, max)
+                    validators::between::validate_between(&new_values, &array_field, min, max)
                 }
-                Rule::Boolean => validators::boolean::validate_boolean(&new_values, field),
-                Rule::Confirmed => validators::confirmed::validate_confirmed(&new_values, field),
+                Rule::Boolean => validators::boolean::validate_boolean(&new_values, &array_field),
+                Rule::Confirmed => {
+                    validators::confirmed::validate_confirmed(&new_values, &array_field)
+                }
                 Rule::Different(other) => {
-                    validators::different::validate_different(&new_values, field, other)
+                    let other = other.split('.').collect::<Vec<&str>>();
+                    validators::different::validate_different(&new_values, &array_field, &other)
                 }
                 Rule::Digits(digits) => {
-                    validators::digits::validate_digits(&new_values, field, digits)
+                    validators::digits::validate_digits(&new_values, &array_field, digits)
                 }
                 Rule::DigitsBetween(min, max) => {
                     validators::digits_between::validate_digits_between(&new_values,
-                                                                        field,
+                                                                        &array_field,
                                                                         min,
                                                                         max)
                 }
-                Rule::Distinct => validators::distinct::validate_distinct(&new_values, field),
-                Rule::Email => validators::email::validate_email(&new_values, field),
+                Rule::Distinct => {
+                    validators::distinct::validate_distinct(&new_values, &array_field)
+                }
+                Rule::Email => validators::email::validate_email(&new_values, &array_field),
                 #[cfg(feature = "pg")]
                 Rule::Exists(conn, table, column) => {
-                    validators::exists::validate_exists(conn, &new_values, field, table, column)
+                    validators::exists::validate_exists(conn,
+                                                        &new_values,
+                                                        &array_field,
+                                                        table,
+                                                        column)
                 }
-                Rule::Filled => validators::filled::validate_filled(&new_values, field),
+                Rule::Filled => validators::filled::validate_filled(&new_values, &array_field),
                 Rule::In(ref options) => {
-                    validators::in_const::validate_in(&new_values, field, options)
+                    validators::in_const::validate_in(&new_values, &array_field, options)
                 }
                 Rule::InArray(other) => {
-                    validators::in_array::validate_in_array(&new_values, field, other)
+                    let other = other.split('.').collect::<Vec<&str>>();
+                    validators::in_array::validate_in_array(&new_values, &array_field, &other)
                 }
-                Rule::Integer => validators::integer::validate_integer(&new_values, field),
-                Rule::IpAddress => validators::ip_address::validate_ip_address(&new_values, field),
-                Rule::Json => validators::json::validate_json(&new_values, field),
-                Rule::Max(target) => validators::max::validate_max(&new_values, field, target),
-                Rule::Min(target) => validators::min::validate_min(&new_values, field, target),
+                Rule::Integer => validators::integer::validate_integer(&new_values, &array_field),
+                Rule::IpAddress => {
+                    validators::ip_address::validate_ip_address(&new_values, &array_field)
+                }
+                Rule::Json => validators::json::validate_json(&new_values, &array_field),
+                Rule::Max(target) => {
+                    validators::max::validate_max(&new_values, &array_field, target)
+                }
+                Rule::Min(target) => {
+                    validators::min::validate_min(&new_values, &array_field, target)
+                }
                 Rule::NotIn(ref options) => {
-                    validators::not_in::validate_not_in(&new_values, field, options)
+                    validators::not_in::validate_not_in(&new_values, &array_field, options)
                 }
                 Rule::NotInArray(other) => {
-                    validators::not_in_array::validate_not_in_array(&new_values, field, other)
+                    let other = other.split('.').collect::<Vec<&str>>();
+                    validators::not_in_array::validate_not_in_array(&new_values,
+                                                                    &array_field,
+                                                                    &other)
                 }
-                Rule::Numeric => validators::numeric::validate_numeric(&new_values, field),
-                Rule::Present => validators::present::validate_present(&new_values, field),
+                Rule::Numeric => validators::numeric::validate_numeric(&new_values, &array_field),
+                Rule::Present => validators::present::validate_present(&new_values, &array_field),
                 Rule::Regex(pattern) => {
-                    validators::regex::validate_regex(&new_values, field, pattern)
+                    validators::regex::validate_regex(&new_values, &array_field, pattern)
                 }
-                Rule::Required => validators::required::validate_required(&new_values, field),
+                Rule::Required => {
+                    validators::required::validate_required(&new_values, &array_field)
+                }
                 Rule::RequiredIf(other, ref condition) => {
+                    let other = other.split('.').collect::<Vec<&str>>();
                     validators::required_if::validate_required_if(&new_values,
-                                                                  field,
-                                                                  other,
+                                                                  &array_field,
+                                                                  &other,
                                                                   condition)
                 }
                 Rule::RequiredUnless(other, ref condition) => {
+                    let other = other.split('.').collect::<Vec<&str>>();
                     validators::required_unless::validate_required_unless(&new_values,
-                                                                          field,
-                                                                          other,
+                                                                          &array_field,
+                                                                          &other,
                                                                           condition)
                 }
-                Rule::RequiredWith(ref other) => {
-                    validators::required_with::validate_required_with(&new_values, field, other)
+                Rule::RequiredWith(ref others) => {
+                    let others = others.iter()
+                        .map(|o| o.split('.').collect::<Vec<&str>>())
+                        .collect::<Vec<Vec<&str>>>();
+                    validators::required_with::validate_required_with(&new_values,
+                                                                      &array_field,
+                                                                      &others)
                 }
-                Rule::RequiredWithAll(ref other) => {
+                Rule::RequiredWithAll(ref others) => {
+                    let others = others.iter()
+                        .map(|o| o.split('.').collect::<Vec<&str>>())
+                        .collect::<Vec<Vec<&str>>>();
                     validators::required_with_all::validate_required_with_all(&new_values,
-                                                                              field,
-                                                                              other)
+                                                                              &array_field,
+                                                                              &others)
                 }
-                Rule::RequiredWithout(ref other) => {
+                Rule::RequiredWithout(ref others) => {
+                    let others = others.iter()
+                        .map(|o| o.split('.').collect::<Vec<&str>>())
+                        .collect::<Vec<Vec<&str>>>();
                     validators::required_without::validate_required_without(&new_values,
-                                                                            field,
-                                                                            other)
+                                                                            &array_field,
+                                                                            &others)
                 }
-                Rule::RequiredWithoutAll(ref other) => {
+                Rule::RequiredWithoutAll(ref others) => {
+                    let others = others.iter()
+                        .map(|o| o.split('.').collect::<Vec<&str>>())
+                        .collect::<Vec<Vec<&str>>>();
                     validators::required_without_all::validate_required_without_all(&new_values,
-                                                                                    field,
-                                                                                    other)
+                                                                                    &array_field,
+                                                                                    &others)
                 }
-                Rule::Same(other) => validators::same::validate_same(&new_values, field, other),
-                Rule::Size(target) => validators::size::validate_size(&new_values, field, target),
-                Rule::String => validators::string::validate_string(&new_values, field),
+                Rule::Same(other) => {
+                    let other = other.split('.').collect::<Vec<&str>>();
+                    validators::same::validate_same(&new_values, &array_field, &other)
+                }
+                Rule::Size(target) => {
+                    validators::size::validate_size(&new_values, &array_field, target)
+                }
+                Rule::String => validators::string::validate_string(&new_values, &array_field),
                 #[cfg(feature = "pg")]
                 Rule::Unique(conn, table, column) => {
-                    validators::unique::validate_unique(conn, &new_values, field, table, column)
+                    validators::unique::validate_unique(conn,
+                                                        &new_values,
+                                                        &array_field,
+                                                        table,
+                                                        column)
                 }
-                Rule::Url => validators::url::validate_url(&new_values, field),
+                Rule::Url => validators::url::validate_url(&new_values, &array_field),
                 #[cfg(not(feature = "pg"))]
                 Rule::Phantom(_) => unimplemented!(),
             };
             match result {
                 Ok(Some(res)) => {
-                    new_values.assign(field, res).ok();
+                    new_values.assign(&array_field.iter()
+                                           .enumerate()
+                                           .map(|(i, x)| if i == 0 {
+                                                    x.to_string()
+                                                } else {
+                                                    format!("[{}]", x)
+                                                })
+                                           .collect::<String>(),
+                                      res)
+                        .ok();
                 }
                 Ok(None) => (),
                 Err(err) => {

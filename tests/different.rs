@@ -14,7 +14,7 @@ fn test_different_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -30,7 +30,7 @@ fn test_different_valid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -46,7 +46,7 @@ fn test_different_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -62,7 +62,7 @@ fn test_different_valid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -78,7 +78,7 @@ fn test_different_invalid_u64() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -94,7 +94,7 @@ fn test_different_valid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -110,7 +110,7 @@ fn test_different_invalid_i64() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -126,7 +126,7 @@ fn test_different_valid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -142,7 +142,7 @@ fn test_different_invalid_f64() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -153,13 +153,12 @@ fn test_different_invalid_f64() {
 fn test_different_valid_array() {
     let mut params = Map::new();
     params.assign("different", Value::Array(vec![Value::F64(42.0)])).ok();
-    params.assign("other", Value::Array(vec![Value::F64(41.0)]))
-        .ok();
+    params.assign("other", Value::Array(vec![Value::F64(41.0)])).ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -175,7 +174,7 @@ fn test_different_valid_empty_array() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -186,13 +185,12 @@ fn test_different_valid_empty_array() {
 fn test_different_invalid_array() {
     let mut params = Map::new();
     params.assign("different", Value::Array(vec![Value::F64(42.0)])).ok();
-    params.assign("other", Value::Array(vec![Value::F64(42.0)]))
-        .ok();
+    params.assign("other", Value::Array(vec![Value::F64(42.0)])).ok();
 
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -212,7 +210,7 @@ fn test_different_valid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -229,7 +227,7 @@ fn test_different_valid_empty_object() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -247,7 +245,7 @@ fn test_different_invalid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -263,7 +261,7 @@ fn test_different_valid_boolean() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]).unwrap(),
@@ -279,7 +277,7 @@ fn test_different_invalid_boolean() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
@@ -293,7 +291,7 @@ fn test_different_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["different"]), None);
@@ -307,9 +305,27 @@ fn test_different_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("different", vec![Rule::Different("other")]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("different").unwrap(),
                vec!["The different field must be different than the other field.".to_owned()]);
+}
+
+#[test]
+fn test_different_valid_nested() {
+    let mut test = Map::new();
+    test.assign("different", Value::String("foo".to_owned())).ok();
+    test.assign("other", Value::String("bar".to_owned())).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.different", vec![Rule::Different("test.other")]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "different"]).unwrap(),
+               &Value::String("foo".to_owned()));
 }

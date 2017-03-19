@@ -13,7 +13,7 @@ fn test_filled_valid_boolean_true() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_filled_valid_boolean_false() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_filled_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(),
@@ -58,7 +58,7 @@ fn test_filled_invalid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("filled").unwrap(),
@@ -73,7 +73,7 @@ fn test_filled_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(), &Value::U64(1));
@@ -87,7 +87,7 @@ fn test_filled_valid_zero() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(), &Value::U64(0));
@@ -101,7 +101,7 @@ fn test_filled_valid_array() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(),
@@ -116,7 +116,7 @@ fn test_filled_invalid_empty_array() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("filled").unwrap(),
@@ -133,7 +133,7 @@ fn test_filled_valid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]).unwrap(),
@@ -149,7 +149,7 @@ fn test_filled_invalid_empty_object() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("filled").unwrap(),
@@ -163,7 +163,7 @@ fn test_filled_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["filled"]), None);
@@ -177,9 +177,26 @@ fn test_filled_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("filled", vec![Rule::Filled]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("filled").unwrap(),
                vec!["The filled field must be filled.".to_owned()]);
+}
+
+#[test]
+fn test_filled_valid_nested() {
+    let mut test = Map::new();
+    test.assign("filled", Value::Boolean(true)).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.filled", vec![Rule::Filled]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "filled"]).unwrap(),
+               &Value::Boolean(true));
 }

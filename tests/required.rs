@@ -13,7 +13,7 @@ fn test_required_valid_boolean_true() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_required_valid_boolean_false() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_required_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -58,7 +58,7 @@ fn test_required_invalid_empty_string() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -73,7 +73,7 @@ fn test_required_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(), &Value::U64(1));
@@ -87,7 +87,7 @@ fn test_required_valid_array() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -102,7 +102,7 @@ fn test_required_invalid_array() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -119,7 +119,7 @@ fn test_required_valid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["required"]).unwrap(),
@@ -135,7 +135,7 @@ fn test_required_invalid_object() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -149,7 +149,7 @@ fn test_required_invalid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
@@ -164,9 +164,26 @@ fn test_required_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("required", vec![Rule::Required]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("required").unwrap(),
                vec!["The required field is required.".to_owned()]);
+}
+
+#[test]
+fn test_required_valid_nested() {
+    let mut test = Map::new();
+    test.assign("required", Value::Boolean(true)).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.required", vec![Rule::Required]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "required"]).unwrap(),
+               &Value::Boolean(true));
 }

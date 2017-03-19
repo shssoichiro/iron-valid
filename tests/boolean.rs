@@ -13,7 +13,7 @@ fn test_boolean_valid_boolean_true() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["boolean"]).unwrap(),
@@ -28,7 +28,7 @@ fn test_boolean_valid_boolean_false() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["boolean"]).unwrap(),
@@ -43,7 +43,7 @@ fn test_boolean_valid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["boolean"]).unwrap(),
@@ -58,7 +58,7 @@ fn test_boolean_invalid_string() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("boolean").unwrap(),
@@ -73,7 +73,7 @@ fn test_boolean_valid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["boolean"]).unwrap(),
@@ -88,7 +88,7 @@ fn test_boolean_invalid_numeric() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("boolean").unwrap(),
@@ -102,7 +102,7 @@ fn test_boolean_valid_blank() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_ok());
     assert_eq!(result.unwrap().find(&["boolean"]), None);
@@ -116,9 +116,26 @@ fn test_boolean_invalid_null() {
     let mut rules = BTreeMap::new();
     rules.insert("boolean", vec![Rule::Boolean]);
 
-    let result = validate(rules, params);
+    let result = validate(&rules, params);
 
     assert!(result.is_err());
     assert_eq!(*result.unwrap_err().get("boolean").unwrap(),
                vec!["The boolean field must be a boolean.".to_owned()]);
+}
+
+#[test]
+fn test_boolean_valid_boolean_nested() {
+    let mut test = Map::new();
+    test.assign("boolean", Value::Boolean(true)).ok();
+    let mut params = Map::new();
+    params.assign("test", Value::Map(test)).ok();
+
+    let mut rules = BTreeMap::new();
+    rules.insert("test.boolean", vec![Rule::Boolean]);
+
+    let result = validate(&rules, params);
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().find(&["test", "boolean"]).unwrap(),
+               &Value::Boolean(true));
 }

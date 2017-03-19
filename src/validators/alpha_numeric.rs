@@ -1,7 +1,7 @@
 use params::{Map, Value};
 
-pub fn validate_alpha_numeric(values: &Map, field: &str) -> Result<Option<Value>, String> {
-    match values.find(&[field]) {
+pub fn validate_alpha_numeric(values: &Map, field: &[&str]) -> Result<Option<Value>, String> {
+    match values.find(field) {
         Some(&Value::String(ref value)) => {
             if value.is_empty() {
                 // Allow empty values
@@ -11,7 +11,10 @@ pub fn validate_alpha_numeric(values: &Map, field: &str) -> Result<Option<Value>
                 return Ok(None);
             }
             Err(format!("The {} field may only contain alphanumeric characters.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
         Some(&Value::U64(ref value)) => Ok(Some(Value::String(format!("{}", value)))),
         Some(&Value::I64(ref value)) if *value >= 0 => {
@@ -23,7 +26,10 @@ pub fn validate_alpha_numeric(values: &Map, field: &str) -> Result<Option<Value>
         }
         _ => {
             Err(format!("The {} field may only contain alphanumeric characters.",
-                        field.to_lowercase().replace("_", " ")))
+                        field.last()
+                            .unwrap()
+                            .to_lowercase()
+                            .replace("_", " ")))
         }
     }
 }
